@@ -1,0 +1,14 @@
+MCIF TX :
+avant : 2 interfaces d'entrée
+après : 3 interfaces
+
+SBC2 NAVGEN Process
+
+SBC1 MISSION COMPONENT
+SBC1 MISSION MAIN
+
+mettre un seul sens de flêche
+
+mettre flêche vers le process et non le composant
+
+
