@@ -1,0 +1,342 @@
+<!-------------------------------------------------------
+ Programme VisuGPX.Pos
+--------------------------------------------------------->
+
+<!----- HEADER ------------------------------------------->
+<!DOCTYPE html>
+<html>
+<head>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <link rel="manifest" href="manifest.json">
+  <link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="favicon-16x16.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
+  <title>VisuGPX.Pos</title>
+  <meta charset="UTF-8">
+</head>
+<body>
+
+<!----- ECRAN HOME ----->
+<link rel='stylesheet' type='text/css' href='home.css'>
+<div id='scrHome' style='display: none'>
+  <div id='BarreHomeHaut'>
+    &nbsp;&nbsp;
+    <button class='ButMenu' id='ButMenuParam'  onclick='ButMenuParamClicked()'></button>
+    &nbsp;
+    <button class='ButMenu' id='ButMenuMsg'    onclick='ButMenuMsgClicked()'></button>
+    &nbsp;
+    <button class='ButMenu' id='ButMenuRoute'  onclick='ButMenuRouteClicked()'></button>
+    &nbsp;
+    <button class='ButMenu' id='ButMenuMeteo'  onclick='ButMenuMeteoClicked()'></button>
+    &nbsp;
+    <button class='ButMenu' id='ButMenuReq'    onclick='ButMenuReqClicked()'>0 Req</button>
+    &nbsp;
+    <button class='ButMenu' id='ButMenuAide'   onclick='ButMenuAideClicked()'></button>
+    &nbsp;
+  </div>
+  <div style='height: 60px'></div>
+  <div style="display: flex; justify-content: space-between; align-items: center;">
+    <b>Message à joindre :</b>
+    <button id="ButEffacer" onclick='butEffaceClicked()'>Effacer</button>
+  </div>
+  <textarea class='ZoneSaisie' id="TxtMessage" rows="6" placeholder="Entrez votre message..."></textarea>
+  <br>
+  <button id="ButParking" onclick='butChoixClicked("PARKING")'>Parking</button><span id='TxtButParking'>Parking️️️</span><br>
+  <button id="ButPosition" onclick='butChoixClicked("POSITION")'>Position</button><span id='TxtButPosition'>Position</span><br>
+  <button id="ButHorsIti" onclick='butChoixClicked("HORS ITI")'>Hors ITI</button><span id='TxtButHorsIti'>Hors Itinéraire</span><br>
+  <button id="ButRepas" onclick='butChoixClicked("REPAS")'>Repas</button><span id='TxtButRepas'>Repas</span><br>
+  <button id="ButBivouac" onclick='butChoixClicked("BIVOUAC")'>Bivouac</button><span id='TxtButBivouac'>Bivouac</span><br>
+  <button id="ButMemo" onclick='butChoixClicked("MEMO")'>Mémo</button><span id='TxtButMemo'>Mémorisation</span><br>
+
+  <!-- debug -->
+  <span id='TxtDebug'></span>
+  <!-- debug -->
+  <br>
+  <div id='DivVersionBarre'>
+    <span id='TxtVersionActuelle'></span>
+    <span id='TxtVersionFuture'></span>
+  </div>
+</div>
+<script src="version.js"></script>
+<script src="home.js"></script>
+
+<!----- ECRAN PARAM ----->
+<link rel='stylesheet' type='text/css' href='param.css'>
+<div id='scrParam' style='display: none'>
+  <div id='BarreParamHaut'>
+    &nbsp;&nbsp;
+    <button class='ClassButParam' id='ButParamAnnuler' onclick='ButParamAnnulerClick()'></button>
+    &nbsp;
+    <button class='ClassButParam' id='ButParamValider' onclick='ButParamValiderClick()'></button>
+    &nbsp;&nbsp;PARAMETRES
+  </div>
+  <div style='height: 60px;'></div>
+
+  <!-- Généraux -->
+  <div style='font-size: 1.2em;'><b>Paramètres généraux</b></div>
+  ID VisuGPX
+  <div style="display: flex; justify-content: space-between; align-items: center;">
+    <input class='ZoneParamSaisie' type='text' id='TxtVisuGPX' placeholder="(10 caractères)"><br>
+    <button id="ButCopierID" onclick="ButCopierIDClick()">Copier</button>
+  </div>
+  <br>
+
+  <!-- Géolocalisation -->
+  <div style='font-size: 1.2em;'><b>Paramètres de géolocalisation</b></div>
+  Seuil précision (m)
+  <input class='ZoneParamSaisie' type='text' id='TxtPrecision' value="15"><br>
+  <div style='height: 5px;'></div>
+
+  Temps maximal pour la géolocalisation (s)
+  <input class='ZoneParamSaisie' type='text' id='TxtTempsMaxLocalisation' value="30"><br>
+  <div style='height: 5px;'></div>
+
+  <div>
+    Simulation localisation<br>
+    <input type='checkbox' id='ChkSimulation'>
+    <input class='ZoneParamSaisie' type='text' id='TxtCoordonnees' value="48.85826187,2.29449563">
+  </div>
+  <br>
+
+  <!-- Météo -->
+  <div style='font-size: 1.2em;'><b>Paramètres pour la météo</b></div>
+  Seuil de vent (km/h)
+  <input class='ZoneParamSaisie' type='text' id='TxtSeuilVent' value="10"><br>
+  <div style='height: 5px;'></div>
+
+  <div>
+    Utiliser le modèle <b>AROME FR</b><br>
+    <input type='checkbox' id='ChkArome'>Oui<br>
+  </div>
+  <div style='height: 5px;'></div>
+
+  Nombre de jours de prévision</b><br>
+  <input class='ZoneParamSaisie' type='text' id='TxtNbJours' value="4" placeholder="(1 à 15)"><br>
+  <br>
+
+  <!-- Affichage -->
+  <div style='font-size: 1.2em;'><b>Personnalisation de l'affichage</b></div>
+  Taille de la police
+  <input class='ZoneParamSaisie' type='text' id='TxtTaillePolice' value="14"><br>
+  <div style='height: 5px;'></div>
+
+  Texte pour "Parking"
+  <input class='ZoneParamSaisie' type='text' id='TxtParking' value="Emplacement de la voiture"><br>
+  <div style='height: 5px;'></div>
+
+  Texte pour "Position"
+  <input class='ZoneParamSaisie' type='text' id='TxtPosition' value="Position actuelle"><br>
+  <div style='height: 5px;'></div>
+
+  Texte pour "Hors Iti"
+  <input class='ZoneParamSaisie' type='text' id='TxtHorsIti' value="Hors Itinéraire"><br>
+  <div style='height: 5px;'></div>
+
+  Texte pour "Repas"
+  <input class='ZoneParamSaisie' type='text' id='TxtRepas' value="Emplacement du repas"><br>
+  <div style='height: 5px;'></div>
+
+  Texte pour "Bivouac"
+  <input class='ZoneParamSaisie' type='text' id='TxtBivouac' value="Emplacement du bivouac"><br>
+  <div style='height: 5px;'></div>
+
+  Texte pour "Mémo"
+  <input class='ZoneParamSaisie' type='text' id='TxtMemo' value="Memorisation d'un message"><br>
+  <br>
+  <br>
+
+  <!-- Informations -->
+  <div style='font-size: 1.2em;'><b>Informations système</b></div>
+  <div id="TxtVersion">Version de l'application</div>
+  <div id="TxtReseau">Accès réseau :</div>
+  <br>
+</div>
+<script src="param.js"></script>
+
+<!----- ECRAN TRAITEMENTS ----->
+<link rel='stylesheet' type='text/css' href='traitements.css'>
+<div id="scrTrait" style="display: none">
+  <div id='BarreTraitChoix'>
+    <div id='TxtTraitTitre'>---</div>
+  </div>
+
+  <div style='height: 80px;'>
+  </div>
+
+  <div id='DivLocalisation' style='height: 100px;'>
+    <span id='Step1' class=classDot></span>&nbsp;
+    <span id='TxtStep1' class=classText>Localisation</span><br>
+  </div>
+
+  <div id='DivMemorisation' style='height: 100px;'>
+    <span id='Step2' class=classDot></span>&nbsp;
+    <span id='TxtStep2' class=classText>Mémorisation</span><br>
+  </div>
+
+  <div id='DivEnvoi' style='height: 100px;'>
+    <span id='Step3' class=classDot></span>&nbsp;
+    <span id='TxtStep3' class=classText>Envoi</span><br>
+  </div>
+
+  <div id='DivBulletin' style='height: 100px;'>
+    <span id='Step4' class=classDot></span>&nbsp;
+    <span id='TxtStep4' class=classText>Bulletin météo</span><br>
+  </div>
+
+  <div class="button-with-multiline-text">
+    <button id="ButTraitRetour" onclick="ButTraitRetourClick()">Retour</button>
+  </div>
+  <br>
+  <div id='TxtTraitInfos'>
+  </div>
+</div>
+<script src="traitements.js"></script>
+<script src="geolocalisation.js"></script>
+
+<!----- ECRAN TEXTE ----->
+<link rel='stylesheet' type='text/css' href='texte.css'>
+<div id="scrTexte" style="display: none">
+  <div id='BarreTexteHaut'>
+    &nbsp;&nbsp;
+    <button class='ClassButTexte' id='ButTexteRetour' onclick='ButTexteRetourClick()'></button>
+    &nbsp;
+    <button class='ClassButTexte' id='ButTexteBegin' onclick='ButTexteBeginClick()'></button>
+    &nbsp;
+    <button class='ClassButTexte' id='ButTexteEnd' onclick='ButTexteEndClick()'></button>
+    &nbsp;
+    <button class='ClassButTexte' id='ButTexteEditer' onclick='AfficherEcranEdit()'></button>
+    &nbsp;&nbsp;
+    <span id=TxtTexteTitre>-</span>
+  </div>
+  <div id='TxtFormated'></div>
+</div>
+<script src="texte.js"></script>
+
+<!----- ECRAN EDITION ----->
+<link rel='stylesheet' type='text/css' href='edit.css'>
+<div id="scrEdit" style="display: none">
+  <div id='BarreEditHaut'>
+    &nbsp;&nbsp;
+    <button class='ClassButEdit' id='ButEditAnnuler' onclick='ButEditAnnulerClick()'></button>
+    &nbsp;
+    <button class='ClassButEdit' id='ButEditValider' onclick="ButEditValiderClick()"></button>
+    &nbsp;
+    <button class='ClassButEdit' id='ButEditBegin' onclick='ButEditBeginClick()'></button>
+    &nbsp;
+    <button class='ClassButEdit' id='ButEditEnd' onclick='ButEditEndClick()'></button>
+    &nbsp;&nbsp;
+    <span id=TxtEditTitre>-</span>
+  </div>
+  <textarea id='TxtEditInput' style='display: none;'></textarea>
+</div>
+<script src="edit.js"></script>
+
+<!----- ECRAN METEO ----->
+<link rel='stylesheet' type='text/css' href='meteo.css'>
+<div id="scrMeteo" style="display: none">
+  <div id='BarreMeteoHaut'>
+    &nbsp;&nbsp;
+    <button id='ButMeteoRetour' onclick='ButMeteoRetourClick()'></button>
+    &nbsp;&nbsp;
+    <button id='ButMeteoGPSNew' onclick='ButMeteoGPSNewClick()'></button>
+    &nbsp;&nbsp;
+    <button id='ButChoixEmplacement' onclick='ButChoixEmplacementClick()'>📍</button><br>
+    &nbsp;&nbsp;
+    <button id='ButMeteoHeuresJours' onclick='ButMeteoHeuresJoursClick()'></button>
+    &nbsp;&nbsp;
+    <span id=TxtMeteoTitre>Météo</span>
+    &nbsp;&nbsp;
+  </div>
+  <div style='height: 60px;'></div>
+  <span id='TxtMeteoInfos'></span>
+  <span id='TxtMeteo'></span>
+  <span id='TxtResume'></span>
+  <br>
+</div>
+<script src="meteo.js"></script>
+
+<!----- ECRAN CHOIX DE L'EMPLACEMENT ----->
+<link rel='stylesheet' type='text/css' href='emplacements.css'>
+<div id="scrChoixEmplacement" style="display: none">
+  <div id='BarreChoixEmplacementHaut'>
+    &nbsp;&nbsp;
+    <button id='ButChoixEmplacementRetour' onclick='ButChoixEmplacementRetourClick()'></button>
+    &nbsp;&nbsp;
+    <button id='ButGestionEmplacements' onclick='AfficheEcranGestionEmplacements()'></button>
+    &nbsp;&nbsp;
+    <span id=TxtEmplacementsTitre>Choix d'un emplacement</span>
+  </div>
+  <div style='height: 60px;'></div>
+  <div id='DivChoixEmplacement'>
+  </div>
+  <br>
+</div>
+<script src="emplacements.js"></script>
+
+<!----- ECRAN GESTION EMPLACEMENTS ----->
+<link rel='stylesheet' type='text/css' href='emplacements.css'>
+<div id="scrGestionEmplacements" style="display: none">
+  <div id='BarreGestionEmplacementsHaut'>
+    &nbsp;&nbsp;
+    <button id='ButGestionEmplacementsRetour' onclick='ButGestionEmplacementsRetourClick()'></button>
+    &nbsp;&nbsp;
+    <span id=TxtGestionEmplacementsTitre>Gestion des emplacements</span>
+  </div>
+  <div style='height: 60px;'></div>
+  <div id='DivListeLatLon'>
+    <span id='TxtListeLatLon'></span>
+  </div>
+  <br>
+</div>
+
+<!----- ECRAN REQUETES ----->
+<link rel='stylesheet' type='text/css' href='requetes.css'>
+<div id='scrReq' style='display: none'>
+  <div id='BarreReqHaut'>
+    &nbsp;&nbsp;
+    <button id='ButReqRetour' onclick='ButReqRetourClick()'></button>
+    &nbsp;&nbsp;
+    <span id=TxtTexteTitre>Requêtes mémorisées</span>
+  </div>
+  <div style='height: 60px;'></div>
+  <div>
+    <span id='TxtReqNb'>Nombre de requêtes en cours : <b></b></span>
+    <div id='DivRequetes'>
+      <br>
+      Pour envoyer les requêtes qui ont été mémorisées hors connexion réseau : <br>
+      <button id='ButEnvoiRequetes' onclick='ButEnvoiRequetesClicked()'>Envoyer</button>
+      <br>
+      <span id='TxtEnvoiRequetesStatut'></span>
+      <br>
+      <br>
+      <br>
+      Pour effacer définitivement les requêtes mémorisées sans les envoyer :<br>
+      <button id='ButClearRequetes' onclick='ButClearRequetesClicked()'>Effacer</button>
+    </div>
+  </div>
+</div>
+<script src="requetes.js"></script>
+
+<!----- ECRAN AIDE ----->
+<link rel='stylesheet' type='text/css' href='aide.css'>
+<div id='scrAide' style='display: none'>
+  <div id='BarreAideHaut'>
+    &nbsp;&nbsp;
+    <button id='ButAideRetour' onclick='ButAideRetourClick()'></button>
+    &nbsp;
+    <button class='ClassButEdit' id='ButAideHome' onclick='ButAideHomeClick()'></button>
+    &nbsp;
+    <button class='ClassButEdit' id='ButAidePlus' onclick='ButAidePlusClick()'></button>
+    &nbsp;
+    <button class='ClassButEdit' id='ButAideMoins' onclick='ButAideMoinsClick()'></button>
+    &nbsp;&nbsp;
+    <span id=TxtAideTitre>Aide</span>
+  </div>
+  <div>
+    <div id='TxtAide'></div>
+  </div>
+</div>
+<script src="aide.js"></script>
+
+</body>
+</html>
