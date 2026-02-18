@@ -1,3 +1,4 @@
+// Update
 importScripts('version.js');
 const CACHE_NAME = 'VisuGPX.Pos'+VERSION;
 const ASSETS = [
@@ -67,7 +68,7 @@ self.addEventListener('install', (event) =>
 });
 
 
-// Stratégie : Répondre avec le cache si hors-ligne
+// StratÃ©gie : RÃ©pondre avec le cache si hors-ligne
 self.addEventListener('fetch', (e) =>
 {
   //console.log("Utilisation fichier local : ", e.request.url);
