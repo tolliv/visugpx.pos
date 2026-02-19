@@ -16,7 +16,7 @@ let gNewVersion = "";
 //----- Installation du Service Worker -----
 if ('serviceWorker' in navigator)
 {
-  const registrationPromise = navigator.serviceWorker.register('/sw.js');
+  const registrationPromise = navigator.serviceWorker.register('./sw.js');
 
   registrationPromise.then(registration =>
   {
@@ -230,5 +230,6 @@ function initierSMS(numero, message)
     const lienSMS = "sms:" + numero + "?body=" + encodeURIComponent(message);
     window.location.href = lienSMS;
 }
+
 
 
