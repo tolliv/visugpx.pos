@@ -1,4 +1,4 @@
-// Update
+// Update 2602.19.1658
 importScripts('version.js');
 const CACHE_NAME = 'VisuGPX.Pos'+VERSION;
 const ASSETS = [
