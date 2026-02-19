@@ -1,0 +1,1 @@
+c:\git\bin\git pull origin main
