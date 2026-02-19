@@ -1,5 +1,6 @@
 @echo off
 set msg=Auto-update %date% %time%
+c:\git\bin\git status
 c:\git\bin\git add .
 c:\git\bin\git commit -m "%msg%"
 c:\git\bin\git push origin main
