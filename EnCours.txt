@@ -1,5 +1,0 @@
-Fichier de configuration
-Ligne 1
-Ligne 2
-
-https://github.com/tolliv/visugpx.pos/raw/refs/heads/main/EnCours.txt?v=123
