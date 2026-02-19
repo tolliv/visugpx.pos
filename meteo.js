@@ -559,7 +559,9 @@ async function DisplayBulletin(data)
       let lBrouillard = 0;
 
       // Boucle sur 6 heures
-      lWeatherCodeText = "<td class='CIEL'>";
+      const lWeatherCodeTextDebut = "<td class='CIEL'>";
+      const lWeatherCodeTextFin = "</td>";
+      let lWeatherCodeText = "";
       for (let j = 0; j < 6; j++)
       {
         GetMeasures(i*24 + lQuart*6 + j);
@@ -596,7 +598,7 @@ async function DisplayBulletin(data)
           default: lWeatherCodeText += "?";       break;
         }
       }
-      lWeatherCodeText += "</td>";
+      lWeatherCodeText = lWeatherCodeTextDebut + lWeatherCodeText + lWeatherCodeTextFin;
 
       // Weather code pour ce quart de journée
       if (lQuart == 0)
@@ -734,6 +736,13 @@ function ConversionDirection(pDegres)
 //-------------------------------------------------------
 async function DownloadBulletin(pToDisplay)
 {
+  let lConnecte = navigator.onLine;
+  if (!lConnecte)
+  {
+    pid('TxtMeteo').innerHTML += "Pas de connexion réseau<br>";
+    return;
+  }
+
   pid('TxtMeteoInfos').innerHTML += "Chargement du nouveau bulletin .. <br>";
 
   let url = "https://api.open-meteo.com/v1/forecast?";

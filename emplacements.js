@@ -84,7 +84,7 @@ function CreeListeEmplacements(choix)
     gLongitudeMeteo = localStorage.getItem('LongitudeMemo');
     HTMLJ += "<div ";
     if (choix==0)
-      HTMLJ += "onclick='SelectionnerEmplacement(\"GPS\"," + gLatitudeMeteo + "," + gLongitudeMeteo + ")' ";
+      HTMLJ += "onclick='SelectionnerEmplacement(\"📡GPS\"," + gLatitudeMeteo + "," + gLongitudeMeteo + ")' ";
     HTMLJ += "class='Emplacement' ";
     HTMLJ += "style='background: #F0F0FF;'>";
     HTMLJ += "📡<b> " + "GPS" + "</b> <small>(" + gLatitudeMeteo + "," + gLongitudeMeteo + ")</small>";
