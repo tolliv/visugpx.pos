@@ -30,13 +30,19 @@ function ButParamAnnulerClick()
 //-------------------------------------------------------
 function ButParamValiderClick()
 {
+  let lModele;
+  if (pid('RadArome').checked) lModele = 1;
+  else if (pid('RadArpege').checked) lModele = 2;
+  else if  (pid('RadIcon').checked) lModele = 3;
+  else if  (pid('RadEcmwf').checked) lModele = 4;
+
   localStorage.setItem('VisuGPX', pid('TxtVisuGPX').value);
   localStorage.setItem('Precision', pid('TxtPrecision').value);
   localStorage.setItem('TempsMaxLocalisation', pid('TxtTempsMaxLocalisation').value);
   localStorage.setItem('SimulationGeolocalisation', (pid('ChkSimulation').checked?"1":"0"));
   localStorage.setItem('SimulationCoordonnees', pid('TxtCoordonnees').value);
   localStorage.setItem('SeuilVent', pid('TxtSeuilVent').value);
-  localStorage.setItem('ModeleAromefr', (pid('ChkArome').checked?"1":"0"));
+  localStorage.setItem('Modele', lModele);
   localStorage.setItem('NbJours', (pid('TxtNbJours').value));
   localStorage.setItem('TaillePolice', pid('TxtTaillePolice').value);
   localStorage.setItem('TexteParking', pid('TxtParking').value);
@@ -98,10 +104,27 @@ function LitParametres()
   pid('TxtSeuilVent').value = param;
   gSeuilVent = parseFloat(param);
 
-  param = localStorage.getItem('ModeleAromefr');
-  if (param == null)
-      param = "1";
-  pid('ChkArome').checked = (param=="1"?true:false);
+  param = localStorage.getItem('Modele');
+  if (param == 1 || param == null || isNaN(param))
+  {
+      pid('RadArome').checked = true;
+      gModel = "AROME";
+  }
+  else if (param == 2)
+  {
+      pid('RadArpege').checked = true;
+      gModel = "ARPEGE";
+  }
+  else if (param == 3)
+  {
+      pid('RadIcon').checked = true;
+      gModel = "ICON";
+  }
+  else if (param == 4)
+  {
+      pid('RadEcmwf').checked = true;
+      gModel = "ECMWF";
+  }
 
   param = localStorage.getItem('NbJours');
   if (param == null || isNaN(param))

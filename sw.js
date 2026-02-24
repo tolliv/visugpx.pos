@@ -28,7 +28,6 @@ const ASSETS = [
   'imgHaut.png',
   'imgHI.png',
   'imgIcone.png',
-  'imgJoursHeures.png',
   'imgMeteo.png',
   'imgMsg.png',
   'imgNewGPSBulletin.png',

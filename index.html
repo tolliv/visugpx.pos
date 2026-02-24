@@ -105,8 +105,20 @@
   <div style='height: 5px;'></div>
 
   <div>
-    Utiliser le modèle <b>AROME FR</b><br>
-    <input type='checkbox' id='ChkArome'>Oui<br>
+    Choix du modèle par défaut<br>
+    <div style="margin-left: 20px; margin-top: 5px;">
+      <input type="radio" id="RadArome"  name="modeleMeteo" value="AROME" checked>
+      <label for="RadArome">AROME France</label><br>
+
+      <input type="radio" id="RadArpege" name="modeleMeteo" value="ARPEGE">
+      <label for="RadArpege">ARPEGE Europe</label><br>
+
+      <input type="radio" id="RadIcon"   name="modeleMeteo" value="ICON">
+      <label for="RadIcon">ICON Europe</label><br>
+
+      <input type="radio" id="RadEcmwf"  name="modeleMeteo" value="ECMWF">
+      <label for="RadEcmwf">ECMWF IFS</label>
+    </div>
   </div>
   <div style='height: 5px;'></div>
 
@@ -235,19 +247,29 @@
 <link rel='stylesheet' type='text/css' href='meteo.css'>
 <div id="scrMeteo" style="display: none">
   <div id='BarreMeteoHaut'>
-    &nbsp;&nbsp;
-    <button id='ButMeteoRetour' onclick='ButMeteoRetourClick()'></button>
-    &nbsp;&nbsp;
-    <button id='ButMeteoGPSNew' onclick='ButMeteoGPSNewClick()'></button>
-    &nbsp;&nbsp;
-    <button id='ButChoixEmplacement' onclick='ButChoixEmplacementClick()'>📍</button><br>
-    &nbsp;&nbsp;
-    <button id='ButMeteoHeuresJours' onclick='ButMeteoHeuresJoursClick()'></button>
-    &nbsp;&nbsp;
-    <span id=TxtMeteoTitre>Météo</span>
-    &nbsp;&nbsp;
+    <div id='BarreMeteoHautL1'>
+      &nbsp;&nbsp;
+      <button id='ButMeteoRetour' onclick='ButMeteoRetourClick()'></button>
+      &nbsp;&nbsp;
+      <button id='ButMeteoGPSNew' onclick='ButMeteoGPSNewClick()'></button>
+      &nbsp;&nbsp;
+      <button id='ButChoixEmplacement' onclick='ButChoixEmplacementClick()'>📍</button><br>
+      &nbsp;&nbsp;
+      <span id=TxtMeteoTitre>Météo</span>
+      &nbsp;&nbsp;
+    </div>
+    <div id='BarreMeteoHautL2'>
+      &nbsp;&nbsp;
+      <button class='BoutonModele' id='ButMeteoAROME'  onclick='ButMeteoAROMEClick()'>AROME</button>
+      <button class='BoutonModele' id='ButMeteoARPEGE' onclick='ButMeteoARPEGEClick()'>ARPEGE</button>
+      <button class='BoutonModele' id='ButMeteoICON'   onclick='ButMeteoICONClick()'>ICON</button>
+      <button class='BoutonModele' id='ButMeteoECMWF'  onclick='ButMeteoECMWFClick()'>ECMWF</button>
+      &nbsp;&nbsp;
+      <button class='BoutonHJ' id='BoutonHeures' onclick='ModeHeures()'>H</button>
+      <button class='BoutonHJ' id='BoutonJours'  onclick='ModeJours()'>J</button>
+    </div>
   </div>
-  <div style='height: 60px;'></div>
+  <div style='height: 90px;'></div>
   <span id='TxtMeteoInfos'></span>
   <span id='TxtMeteo'></span>
   <span id='TxtResume'></span>

@@ -8,6 +8,7 @@ let gLongitudeMeteo = 0;
 let gAltitudeMeteo = 0;
 let gEmplacementMeteo = "";
 let gMeteoMode = "H";
+let gModel = "AROME";
 
 //-------------------------------------------------------
 // Afficher l'écran scrMeteo
@@ -101,9 +102,10 @@ async function DisplayLastBulletin()
 //-------------------------------------------------------
 // Renvoie les différentes valeurs en fonction du modèle
 // Met à jour les variables globales communes
+// index = heure depuis ce matin 00h
 //-------------------------------------------------------
-let gSunrise;
-let gSunset;
+let gSunrise = "erreur";
+let gSunset = "erreur";
 let gTemperature_2m;
 let gApparent_temperature;
 let gWeather_code;
@@ -114,42 +116,105 @@ let gWind_speed_10m;
 let gWind_direction_10m;
 let gWind_gusts_10m;
 let gPrecipitation_probability;
-let gModelUsed;
+let gModelUsed = "ERREUR";
 function GetMeasures(index)
 {
+  let lModel = gModel;
   try
   {
-    gSunrise = (data.daily.sunrise_meteofrance_arome_france[0]).slice(-5);
-    gSunset = (data.daily.sunset_meteofrance_arome_france[0]).slice(-5);
+    gSunrise = (data.daily.sunrise_ecmwf_ifs[0]).slice(-5);
+    gSunset = (data.daily.sunset_ecmwf_ifs[0]).slice(-5);
 
-    // Les 2 premiers jours sont avec meteofrance_arome_france
-    if ((index < 48) && pid('ChkArome').checked)
+    //---------- Modèle météo AROME France ----------
+    if (lModel == "AROME")
     {
+      // En cas de problème, on switch sur ECMWF par défaut
       gTemperature_2m = data.hourly.temperature_2m_meteofrance_arome_france[index];
-      gApparent_temperature = data.hourly.apparent_temperature_meteofrance_arome_france[index];
-      gWeather_code = data.hourly.weather_code_meteofrance_arome_france[index];
-      gRelative_humidity_2m = data.hourly.relative_humidity_2m_meteofrance_arome_france[index];
-      gSnowfall = data.hourly.snowfall_meteofrance_arome_france[index];
-      gPrecipitation = data.hourly.precipitation_meteofrance_arome_france[index];
-      gWind_speed_10m = data.hourly.wind_speed_10m_meteofrance_arome_france[index];
-      gWind_direction_10m = data.hourly.wind_direction_10m_meteofrance_arome_france[index];
-      gWind_gusts_10m = data.hourly.wind_gusts_10m_meteofrance_arome_france[index];
-      gModelUsed ="AROME FR";
+      if (gTemperature_2m === null)
+      {
+        lModel = "ECMWF";
+      }
+      else
+      {
+        gApparent_temperature = data.hourly.apparent_temperature_meteofrance_arome_france[index];
+        gWeather_code = data.hourly.weather_code_meteofrance_arome_france[index];
+        gRelative_humidity_2m = data.hourly.relative_humidity_2m_meteofrance_arome_france[index];
+        gSnowfall = data.hourly.snowfall_meteofrance_arome_france[index];
+        gPrecipitation = data.hourly.precipitation_meteofrance_arome_france[index];
+        gWind_speed_10m = data.hourly.wind_speed_10m_meteofrance_arome_france[index];
+        gWind_direction_10m = data.hourly.wind_direction_10m_meteofrance_arome_france[index];
+        gWind_gusts_10m = data.hourly.wind_gusts_10m_meteofrance_arome_france[index];
+        gModelUsed ="AROME";
+      }
     }
 
-    // Au-delà de 48h, on utilise ecwm_ifs
-    else
+    //---------- Modèle météo ARPEGE ----------
+    if (lModel == "ARPEGE")
     {
+      // En cas de problème, on switch sur ECMWF par défaut
+      gTemperature_2m = data.hourly.temperature_2m_meteofrance_arpege_europe[index];
+      if (gTemperature_2m === null)
+      {
+        lModel = "ECMWF";
+      }
+      else
+      {
+        gApparent_temperature = data.hourly.apparent_temperature_meteofrance_arpege_europe[index];
+        gWeather_code = data.hourly.weather_code_meteofrance_arpege_europe[index];
+        gRelative_humidity_2m = data.hourly.relative_humidity_2m_meteofrance_arpege_europe[index];
+        gSnowfall = data.hourly.snowfall_meteofrance_arpege_europe[index];
+        gPrecipitation = data.hourly.precipitation_meteofrance_arpege_europe[index];
+        gWind_speed_10m = data.hourly.wind_speed_10m_meteofrance_arpege_europe[index];
+        gWind_direction_10m = data.hourly.wind_direction_10m_meteofrance_arpege_europe[index];
+        gWind_gusts_10m = data.hourly.wind_gusts_10m_meteofrance_arpege_europe[index];
+        gModelUsed ="ARPEGE";
+      }
+    }
+
+    //---------- Modèle météo ICON ----------
+    if (lModel == "ICON")
+    {
+      // En cas de problème, on switch sur ECMWF par défaut
+      gTemperature_2m = data.hourly.temperature_2m_icon_eu[index];
+      if (gTemperature_2m === null)
+      {
+        lModel = "ECMWF";
+      }
+      else
+      {
+        gApparent_temperature = data.hourly.apparent_temperature_icon_eu[index];
+        gWeather_code = data.hourly.weather_code_icon_eu[index];
+        gRelative_humidity_2m = data.hourly.relative_humidity_2m_icon_eu[index];
+        gSnowfall = data.hourly.snowfall_icon_eu[index];
+        gPrecipitation = data.hourly.precipitation_icon_eu[index];
+        gWind_speed_10m = data.hourly.wind_speed_10m_icon_eu[index];
+        gWind_direction_10m = data.hourly.wind_direction_10m_icon_eu[index];
+        gWind_gusts_10m = data.hourly.wind_gusts_10m_icon_eu[index];
+        gModelUsed ="ICON";
+      }
+    }
+
+    //---------- Modèle météo ECMWF ----------
+    if (lModel == "ECMWF")
+    {
+      // En cas de problème, on switch sur ECMWF par défaut
       gTemperature_2m = data.hourly.temperature_2m_ecmwf_ifs[index];
-      gApparent_temperature = data.hourly.apparent_temperature_ecmwf_ifs[index];
-      gWeather_code = data.hourly.weather_code_ecmwf_ifs[index];
-      gRelative_humidity_2m = data.hourly.relative_humidity_2m_ecmwf_ifs[index];
-      gSnowfall = data.hourly.snowfall_ecmwf_ifs[index];
-      gPrecipitation = data.hourly.precipitation_ecmwf_ifs[index];
-      gWind_speed_10m = data.hourly.wind_speed_10m_ecmwf_ifs[index];
-      gWind_direction_10m = data.hourly.wind_direction_10m_ecmwf_ifs[index];
-      gWind_gusts_10m = data.hourly.wind_gusts_10m_ecmwf_ifs[index];
-      gModelUsed ="ECMWF IFS";
+      if (gTemperature_2m === null)
+      {
+        lModel = "ERREUR";
+      }
+      else
+      {
+        gApparent_temperature = data.hourly.apparent_temperature_ecmwf_ifs[index];
+        gWeather_code = data.hourly.weather_code_ecmwf_ifs[index];
+        gRelative_humidity_2m = data.hourly.relative_humidity_2m_ecmwf_ifs[index];
+        gSnowfall = data.hourly.snowfall_ecmwf_ifs[index];
+        gPrecipitation = data.hourly.precipitation_ecmwf_ifs[index];
+        gWind_speed_10m = data.hourly.wind_speed_10m_ecmwf_ifs[index];
+        gWind_direction_10m = data.hourly.wind_direction_10m_ecmwf_ifs[index];
+        gWind_gusts_10m = data.hourly.wind_gusts_10m_ecmwf_ifs[index];
+        gModelUsed ="ECMWF";
+      }
     }
 
     // Seule la probalité de précipitation est fournie par ecmwf_ifs
@@ -157,8 +222,12 @@ function GetMeasures(index)
   }
   catch (error)
   {
-    gSunrise = "erreur";
-    gSunset = "erreur";
+    lModel = "ERREUR";
+  }
+
+  // Valeurs en cas d'erreur sur ECMWF et si une variable n'existe pas
+  if (lModel == "ERREUR")
+  {
     gTemperature_2m = 0;
     gApparent_temperature = 0;
     gWeather_code = 1000;
@@ -168,9 +237,9 @@ function GetMeasures(index)
     gWind_speed_10m = 0;
     gWind_direction_10m = 0;
     gWind_gusts_10m = 0;
-    gModelUsed ="";
+    gPrecipitation_probability = 0;
+    gModelUsed ="ERREUR";
   }
-
 }
 
 //-------------------------------------------------------
@@ -240,8 +309,12 @@ async function DisplayBulletin(data)
   let   lTempResult;
   let   HTMLJ;
 
+  // Affiche la couleur du modèle actuel
+  CouleurModele();
+
   // Récupération les mesures pour sunrise et sunset
   GetMeasures(0);
+
 
   // Affichage informations pour ce bulletin
   HTMLJ = "";
@@ -489,7 +562,6 @@ async function DisplayBulletin(data)
   HTMLJ += "<span style='display: inline-block; width:50px;'><b>&nbsp;Vent</b></span> Vent et direction<br>";
   HTMLJ += "<span style='display: inline-block; width:50px;'><b>&nbsp;Dir</b></span> Direction du vent<br>";
   pid('TxtMeteo').innerHTML = HTMLJ;
-
 
   //================================================================================================
   // Création de la page Résumé jour par jour
@@ -754,6 +826,8 @@ async function DownloadBulletin(pToDisplay)
   url +=    "true" + "&";
   url += "models=";
   url +=    "meteofrance_arome_france" + ",";
+  url +=    "meteofrance_arpege_europe" + ",";
+  url +=    "icon_eu" + ",";
   url +=    "ecmwf_ifs" + "&";
   url += "daily=";
   url +=    "sunrise" + ",";
@@ -918,12 +992,16 @@ function ModeHeures() // On prépare le bouton pour afficher Jours
   gMeteoMode = "H";
   pid('TxtMeteo').style.display = 'block';
   pid('TxtResume').style.display = 'none';
+  pid('BoutonHeures').style.backgroundColor = '#AEF';
+  pid('BoutonJours').style.backgroundColor = '#FFF';
 }
 function ModeJours() // On prépare le bouton pour afficher Heures
 {
   gMeteoMode = "J";
   pid('TxtMeteo').style.display = 'none';
   pid('TxtResume').style.display = 'block';
+  pid('BoutonHeures').style.backgroundColor = '#FFF';
+  pid('BoutonJours').style.backgroundColor = '#AEF';
 }
 function ButMeteoHeuresJoursClick()
 {
@@ -942,4 +1020,52 @@ function ButMeteoHeuresJoursClick()
 function ButChoixEmplacementClick()
 {
   AfficheEcranChoixEmplacement();
+}
+
+
+//-------------------------------------------------------
+// Couleur du bouton modèle météo
+//-------------------------------------------------------
+function CouleurModele()
+{
+  pid('ButMeteoAROME').style.backgroundColor  = (gModel == "AROME"?"#AFA":"#FFF");
+  pid('ButMeteoARPEGE').style.backgroundColor = (gModel == "ARPEGE"?"#AFA":"#FFF");
+  pid('ButMeteoICON').style.backgroundColor   = (gModel == "ICON"?"#AFA":"#FFF");
+  pid('ButMeteoECMWF').style.backgroundColor  = (gModel == "ECMWF"?"#AFA":"#FFF");
+}
+
+//-------------------------------------------------------
+// Choix du modèle météo
+//-------------------------------------------------------
+function ButMeteoAROMEClick()
+{
+  if (gModel != "AROME")
+  {
+    gModel = "AROME";
+    DisplayLastBulletin();
+  }
+}
+function ButMeteoARPEGEClick()
+{
+  if (gModel != "ARPEGE")
+  {
+    gModel = "ARPEGE";
+    DisplayLastBulletin();
+  }
+}
+function ButMeteoICONClick()
+{
+  if (gModel != "ICON")
+  {
+    gModel = "ICON";
+    DisplayLastBulletin();
+  }
+}
+function ButMeteoECMWFClick()
+{
+  if (gModel != "ECMWF")
+  {
+    gModel = "ECMWF";
+    DisplayLastBulletin();
+  }
 }
