@@ -321,8 +321,31 @@
 
   <div style='height: 60px;'></div>
   <b>Liste des emplacements :</b>
-  <textarea class='ZoneSaisie' id="TxtEmplacements" rows=25 style='resize: none; font-family: monospace;' placeholder="Paris : 48.8583, 2.2944"></textarea>
+  <textarea class='ZoneSaisie' id="TxtEmplacements" rows=20 style='resize: none; font-family: monospace; margin-top: 5px;' placeholder="Paris : 48.8583, 2.2944"></textarea>
   <br>
+  <br>
+  <b>Récupération de coordonnées d'un lieu :</b>
+  <div style="display: flex; gap: 5px; margin-top: 5px; align-items: center;">
+    <input type="text" id="InpGeoVille" placeholder="Ville (ex: Lyon)" style="flex: 2; height: 30px; padding: 0 5px;">
+
+    <select id="SelGeoPays" style="flex: 1; height: 34px;">
+      <option value="">Pays (Tous)</option>
+      <option value="FR" selected>France</option>
+      <option value="CH">Suisse</option>
+      <option value="BE">Belgique</option>
+      <option value="IT">Italie</option>
+      <option value="ES">Espagne</option>
+      <option value="DE">Allemagne</option>
+      <option value="GB">Royaume-Uni</option>
+    </select>
+
+    <button id="ButGeoChercher" onclick="GeocodingChercherVille()" style="height: 34px; padding: 0 10px;">OK</button>
+  </div>
+
+  <!-- Liste des résultats de recherche -->
+  <div id="DivGeoResultats" style="margin-top: 10px; max-height: 150px; overflow-y: auto; border: 1px solid #ccc; background: #f9f9f9; display: none;">
+    <ul id="UlGeoResultats" style="list-style: none; padding: 0; margin: 0; cursor: pointer;"></ul>
+  </div>
   <br>
 </div>
 

@@ -9,7 +9,8 @@ let HTMLJ = "";
 function AfficheEcranChoixEmplacement()
 {
   pid('scrMeteo').style.display = 'none';
-  CreeListeEmplacements(0);
+  pid('scrHome').style.display = 'none';
+  CreeListeEmplacements();
   pid('DivChoixEmplacement').innerHTML = HTMLJ;
   pid('scrChoixEmplacement').style.display = 'block';
 }
@@ -45,17 +46,9 @@ function SelectionnerEmplacement(nom, lat, lon)
   pid('scrMeteo').style.display = 'block';
 }
 
-
-
-//==================================================================================================
-// Partie Commune aux 2
-//==================================================================================================
-
-
 //-------------------------------------------------------
 // Création d'une liste d'emplacements
 // choix=0 pour une sélection (cliquable)
-// choix=1 pour la gestion (non cliquable)
 //-------------------------------------------------------
 function CreeListeEmplacements(choix)
 {
@@ -70,63 +63,35 @@ function CreeListeEmplacements(choix)
   }
 
   HTMLJ = "";
-
-  if (choix==0)
-  {
-    HTMLJ += "<b>Cliquer sur un emplacement pré-enregistré</b><br>";
-  }
+  HTMLJ += "<b>Cliquer sur un emplacement pré-enregistré</b><br>";
   HTMLJ += "<div style='height: 6px;'></div>";
 
   // Coordonnées GPS mémorisées uniquement pour un choix
-  if (choix==0)
-  {
-    gLatitudeMeteo = localStorage.getItem('LatitudeMemo');
-    gLongitudeMeteo = localStorage.getItem('LongitudeMemo');
-    HTMLJ += "<div ";
-    if (choix==0)
-      HTMLJ += "onclick='SelectionnerEmplacement(\"📡GPS\"," + gLatitudeMeteo + "," + gLongitudeMeteo + ")' ";
-    HTMLJ += "class='Emplacement' ";
-    HTMLJ += "style='background: #F0F0FF;'>";
-    HTMLJ += "📡<b> " + "GPS" + "</b> <small>(" + gLatitudeMeteo + "," + gLongitudeMeteo + ")</small>";
-    HTMLJ += "</div>";
-    HTMLJ += "<div style='height: 2px;'></div>";
-  }
+  gLatitudeMeteo = localStorage.getItem('LatitudeMemo');
+  gLongitudeMeteo = localStorage.getItem('LongitudeMemo');
+  HTMLJ += "<div ";
+  HTMLJ += "onclick='SelectionnerEmplacement(\"📡GPS\"," + gLatitudeMeteo + "," + gLongitudeMeteo + ")' ";
+  HTMLJ += "class='Emplacement' ";
+  HTMLJ += "style='background: #F0F0FF;'>";
+  HTMLJ += "📡<b> " + "GPS" + "</b> <small>(" + gLatitudeMeteo + "," + gLongitudeMeteo + ")</small>";
+  HTMLJ += "</div>";
+  HTMLJ += "<div style='height: 2px;'></div>";
 
-  // Création de la liste cliquable (si choix=0)
+  // Création de la liste cliquable
   lListeEmplacements.forEach((emplacement, index) =>
   {
     HTMLJ += "<div style='display: flex; align-items: center; margin-bottom: 2px;'>";
 
     // Zone du nom (cliquable pour sélectionner)
+    const lNom = emplacement.nom.replace(/'/g, "`");
     HTMLJ += "<div ";
-    if (choix==0)
-      HTMLJ += "onclick='SelectionnerEmplacement(\"" + emplacement.nom + "\"," + emplacement.lat + "," + emplacement.lon + ")' ";
+    HTMLJ += "onclick='SelectionnerEmplacement(\"" + lNom + "\"," + emplacement.lat + "," + emplacement.lon + ")' ";
     HTMLJ += "class='Emplacement' style='background: #EFE; flex-grow: 1;'>";
-    HTMLJ += "<b> " + emplacement.nom + "</b> <small>(" + emplacement.lat + "," + emplacement.lon + ")</small>";
+    HTMLJ += "<b> " + lNom + "</b> <small>(" + emplacement.lat + "," + emplacement.lon + ")</small>";
     HTMLJ += "</div>";
-
-    if (choix==1)
-    {
-      HTMLJ += "  <div class='ButDelEmplacement' style='background:#ddd; color:black;' onclick='DeplacerEmplacementHaut(" + index + ")'>▲</div>";
-      HTMLJ += "  <div class='ButDelEmplacement' style='background:#ddd; color:black;' onclick='DeplacerEmplacementBas(" + index + ")'>▼</div>";
-      HTMLJ += "  <div class='ButDelEmplacement' onclick='SupprimerEmplacement(" + index + ")'>-</div>";
-    }
 
     HTMLJ += "</div>";
   });
-
-  if (choix==1)
-  {
-    // Ajout d'un champ de saisie
-    HTMLJ += "<div style='height: 30px;'></div>";
-    HTMLJ += "<b>Ajouter un nouvel emplacement</b>";
-    HTMLJ += "<div style='height: 4px;'></div>";
-    HTMLJ += "<div>";
-    HTMLJ += "  <input type='text' class='InputEmplacement' id='NewNom' placeholder='Paris Tour Eiffel'>";
-    HTMLJ += "  <input type='text' class='InputEmplacement' id='NewLatLon' placeholder='48.8583, 2.2944'> ";
-    HTMLJ += "  <button class='ButAddEmplacement' onclick='AjouterNouvelEmplacement()'>+</button>";
-    HTMLJ += "</div>";
-  }
 }
 
 
@@ -134,7 +99,6 @@ function CreeListeEmplacements(choix)
 //==================================================================================================
 // Partie Gestion des emplacements
 //==================================================================================================
-
 
 //-------------------------------------------------------
 // Affichage d'une liste d'emplacements
@@ -168,7 +132,7 @@ function CreeTexteEmplacements()
   // Texte emplacement par emplacement
   lListeEmplacements.forEach((emplacement, index) =>
   {
-    lTXT += emplacement.nom + " : " + emplacement.lat + ", " + emplacement.lon + "\r\n";
+    lTXT += emplacement.nom + ": " + emplacement.lat + ", " + emplacement.lon + "\r\n";
   });
 
   pid('TxtEmplacements').value = lTXT;
@@ -237,4 +201,87 @@ function ButGestionEmplacementsValiderClick()
   localStorage.setItem("ListeEmplacements", JSON.stringify(nouvelleListe));
   pid('scrGestionEmplacements').style.display = 'none';
   AfficheEcranChoixEmplacement();
+}
+
+//-------------------------------------------------------
+// Récupération des coordonnées GPS d'une ville
+//-------------------------------------------------------
+async function GeocodingChercherVille()
+{
+  const ville = document.getElementById('InpGeoVille').value;
+  const pays = document.getElementById('SelGeoPays').value;
+  const listContainer = document.getElementById('DivGeoResultats');
+  const ul = document.getElementById('UlGeoResultats');
+
+  if (!ville) {
+    alert("Veuillez saisir le nom d'une ville");
+    return;
+  }
+
+  // Construction de l'URL pour l'API Open-Meteo Geocoding
+  let url = `https://geocoding-api.open-meteo.com/v1/search?name=${encodeURIComponent(ville)}&count=10&language=fr&format=json`;
+  if (pays) url += '&countryCode=' + pays;
+
+  try
+  {
+    const response = await fetch(url);
+    const data = await response.json();
+
+    ul.innerHTML = '';
+
+    if (data.results && data.results.length > 0)
+    {
+      listContainer.style.display = 'block';
+
+      data.results.forEach(res =>
+      {
+        const li = document.createElement('li');
+        li.style.padding = '5px';
+        li.style.borderBottom = '1px solid #ddd';
+
+        // Préparation des composants
+        const departement = res.admin1 ? res.admin1 : '';
+        const paysCode = res.country_code ? res.country_code : '';
+        const altitude = res.elevation ? "Altitude=" + Math.round(res.elevation) + "m" : "";
+
+        // Label affiché dans la liste de suggestion
+        li.innerHTML = "<b>" + res.name + "</b> (" + departement + ", " + paysCode + ", "+ altitude + ")";
+
+        // Effets visuels au survol
+        li.onmouseover = () => { li.style.background = '#e9ecef'; };
+        li.onmouseout = () => { li.style.background = 'transparent'; };
+
+        // Action au clic : ajout dans la zone de texte
+        li.onclick = () => {
+          // Formatage demandé : Nom (département, codeCountry) altitude : lat, lon
+          const formatted = res.name + ": " + res.latitude.toFixed(6) + ", " + res.longitude.toFixed(6);
+          const area = document.getElementById('TxtEmplacements');
+
+          // Ajout d'un saut de ligne si la zone n'est pas vide
+          if (area.value.trim() !== "" && !area.value.endsWith("\n"))
+          {
+            area.value += "\n";
+          }
+          area.value += formatted + "\n";
+
+          // Nettoyage de la recherche
+          listContainer.style.display = 'none';
+          document.getElementById('InpGeoVille').value = '';
+          ul.innerHTML = '';
+        };
+
+        ul.appendChild(li);
+      });
+    }
+    else
+    {
+      alert("Aucun résultat trouvé pour cette recherche.");
+      listContainer.style.display = 'none';
+    }
+  }
+  catch (error)
+  {
+    console.error("Erreur lors de la récupération des données de géocodage:", error);
+    alert("Erreur de connexion au service de géocodage.");
+  }
 }
