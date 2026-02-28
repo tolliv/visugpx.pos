@@ -16,10 +16,17 @@ let gNewVersion = "";
 //----- Installation du Service Worker -----
 if ('serviceWorker' in navigator)
 {
-  const registrationPromise = navigator.serviceWorker.register('./sw.js');
+  // updateViaCache: 'none' force le navigateur à ignorer son cache HTTP
+  const registrationPromise = navigator.serviceWorker.register('./sw.js',
+  {
+    updateViaCache: 'none'
+  });
 
   registrationPromise.then(registration =>
   {
+    // Force une vérification de mise à jour à chaque chargement de la page
+    registration.update();
+
     // Updatefound
     registration.addEventListener('updatefound', () =>
     {
