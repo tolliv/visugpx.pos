@@ -37,7 +37,7 @@ async function AfficherEcranMETEO()
     if (differenceEnMinutes >= 5)
       lDoitEtreCharge = true;
   }
-  const lConnecte = navigator.onLine;
+  const lConnecte = IsConnected();
   if (!lConnecte)
     lDoitEtreCharge = false;
 
@@ -752,8 +752,7 @@ async function DisplayBulletin(data)
   if (gMeteoMode == "J")
     ModeJours();
 
-  // Pour le debug, on peut afficher directement le mode Jours
-  // ModeJours();
+    // ModeJours(); // Mode DEBUG : affichage du mode Jours (commenter si RELEASE)
 }
 
 //-------------------------------------------------------
@@ -808,7 +807,7 @@ function ConversionDirection(pDegres)
 //-------------------------------------------------------
 async function DownloadBulletin(pToDisplay)
 {
-  let lConnecte = navigator.onLine;
+  let lConnecte = IsConnected();
   if (!lConnecte)
   {
     pid('TxtMeteo').innerHTML += "Pas de connexion réseau<br>";
@@ -867,9 +866,7 @@ async function DownloadBulletin(pToDisplay)
     localStorage.setItem('DateBulletin', dateActuelle.toISOString());
     localStorage.setItem('EmplacementBulletin', gEmplacementMeteo);
 
-//----- A conserver pour debug -----
-//    console.log("Données météo :", data);
-//----- A conserver pour debug -----
+//    console.log("Données météo :", data); // Mode DEBUG : affichage des données (commenter si RELEASE)
 
     pid('TxtMeteo').innerHTML += "Chargement du nouveau bulletin <b>Réussi</b><br>";
 

@@ -8,7 +8,7 @@
 function AfficherEcranPARAM()
 {
   // Affichage
-  let lConnecte = navigator.onLine;
+  let lConnecte = IsConnected();
   pid('TxtReseau').innerHTML = "Accès réseau : <b>" + (lConnecte?"Oui":"Non") + "</b>";
   pid('scrParam').style.display = 'block';
 }
@@ -36,7 +36,13 @@ function ButParamValiderClick()
   else if  (pid('RadIcon').checked) lModele = 3;
   else if  (pid('RadEcmwf').checked) lModele = 4;
 
+  let lIconePosition;
+  if (pid('RadMarkerClassique').checked) lIconePosition = 1;
+  else if (pid('RadMarkerPerso').checked) lIconePosition = 2;
+
   localStorage.setItem('VisuGPX', pid('TxtVisuGPX').value);
+  localStorage.setItem('IconePosition', lIconePosition);
+  localStorage.setItem('TxtMarkerPerso', pid('TxtMarkerPerso').value);
   localStorage.setItem('Precision', pid('TxtPrecision').value);
   localStorage.setItem('TempsMaxLocalisation', pid('TxtTempsMaxLocalisation').value);
   localStorage.setItem('SimulationGeolocalisation', (pid('ChkSimulation').checked?"1":"0"));
@@ -45,11 +51,17 @@ function ButParamValiderClick()
   localStorage.setItem('Modele', lModele);
   localStorage.setItem('NbJours', (pid('TxtNbJours').value));
   localStorage.setItem('TaillePolice', pid('TxtTaillePolice').value);
+  localStorage.setItem('BoutonParking', pid('ChkParking').checked?"1":"0");
   localStorage.setItem('TexteParking', pid('TxtParking').value);
+  localStorage.setItem('BoutonPosition', pid('ChkPosition').checked?"1":"0");
   localStorage.setItem('TextePosition', pid('TxtPosition').value);
+  localStorage.setItem('BoutonHorsIti', pid('ChkHorsIti').checked?"1":"0");
   localStorage.setItem('TexteHorsIti', pid('TxtHorsIti').value);
+  localStorage.setItem('BoutonRepas', pid('ChkRepas').checked?"1":"0");
   localStorage.setItem('TexteRepas', pid('TxtRepas').value);
+  localStorage.setItem('BoutonBivouac', pid('ChkBivouac').checked?"1":"0");
   localStorage.setItem('TexteBivouac', pid('TxtBivouac').value);
+  localStorage.setItem('BoutonMemo', pid('ChkMemo').checked?"1":"0");
   localStorage.setItem('TexteMemo', pid('TxtMemo').value);
 
   // On relit les paramètres et on ferme l'écran
@@ -71,6 +83,17 @@ function LitParametres()
   if (param == null)
       param = "ABCD123456";
   pid('TxtVisuGPX').value = param;
+
+  param = localStorage.getItem('IconePosition');
+  if (param == null)
+      param = 1;
+  if (param == 1) pid('RadMarkerClassique').checked = true;
+  else if (param == 2) pid('RadMarkerPerso').checked = true;
+
+  param = localStorage.getItem('TxtMarkerPerso');
+  if (param == null)
+      param = "🟩 (Toto)";
+  pid('TxtMarkerPerso').value = param;
 
   //----- Paramètres géolocalisation -----
 
@@ -135,7 +158,7 @@ function LitParametres()
     param = "15";
   pid('TxtNbJours').value = param;
 
-  //----- Personnalisation -----
+  //----- Personnalisation affichage -----
 
   param = localStorage.getItem('TaillePolice');
   if (param == null || isNaN(param))
@@ -147,11 +170,25 @@ function LitParametres()
   pid('TxtTaillePolice').value = param;
   ChangeTaillePolice();
 
+  //--- Parking ---
+  param = localStorage.getItem('BoutonParking');
+  if (param == null)
+    param = "1";
+  pid('ChkParking').checked = (param=="1"?true:false);
+  pid('DivParking').style.display = (param=="1"?'block':'none');
+
   param = localStorage.getItem('TexteParking');
   if (param == null)
       param = "Emplacement de la voiture";
   pid('TxtParking').value = param;
   pid('TxtButParking').innerHTML = param;
+
+  //--- Postion ---
+  param = localStorage.getItem('BoutonPosition');
+  if (param == null)
+    param = "1";
+  pid('ChkPosition').checked = (param=="1"?true:false);
+  pid('DivPosition').style.display = (param=="1"?'block':'none');
 
   param = localStorage.getItem('TextePosition');
   if (param == null)
@@ -159,11 +196,25 @@ function LitParametres()
   pid('TxtPosition').value = param;
   pid('TxtButPosition').innerHTML = param;
 
+  //--- Hors Iti ---
+  param = localStorage.getItem('BoutonHorsIti');
+  if (param == null)
+    param = "1";
+  pid('ChkHorsIti').checked = (param=="1"?true:false);
+  pid('DivHorsIti').style.display = (param=="1"?'block':'none');
+
   param = localStorage.getItem('TexteHorsIti');
   if (param == null)
       param = "Hors Itinéraire";
   pid('TxtHorsIti').value = param;
   pid('TxtButHorsIti').innerHTML = param;
+
+  //--- Repas ---
+  param = localStorage.getItem('BoutonRepas');
+  if (param == null)
+    param = "1";
+  pid('ChkRepas').checked = (param=="1"?true:false);
+  pid('DivRepas').style.display = (param=="1"?'block':'none');
 
   param = localStorage.getItem('TexteRepas');
   if (param == null)
@@ -171,11 +222,25 @@ function LitParametres()
   pid('TxtRepas').value = param;
   pid('TxtButRepas').innerHTML = param;
 
+  //--- Bivouac ---
+  param = localStorage.getItem('BoutonBivouac');
+  if (param == null)
+    param = "1";
+  pid('ChkBivouac').checked = (param=="1"?true:false);
+  pid('DivBivouac').style.display = (param=="1"?'block':'none');
+
   param = localStorage.getItem('TexteBivouac');
   if (param == null)
       param = "Emplacement du bivouac";
   pid('TxtBivouac').value = param;
   pid('TxtButBivouac').innerHTML = param;
+
+  //--- Mémo ---
+  param = localStorage.getItem('BoutonMemo');
+  if (param == null)
+    param = "1";
+  pid('ChkMemo').checked = (param=="1"?true:false);
+  pid('DivMemo').style.display = (param=="1"?'block':'none');
 
   param = localStorage.getItem('TexteMemo');
   if (param == null)

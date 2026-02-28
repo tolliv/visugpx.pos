@@ -41,16 +41,12 @@
   </div>
   <textarea class='ZoneSaisie' id="TxtMessage" rows="6" placeholder="Entrez votre message..."></textarea>
   <br>
-  <button id="ButParking" onclick='butChoixClicked("PARKING")'>Parking</button><span id='TxtButParking'>Parking️️️</span><br>
-  <button id="ButPosition" onclick='butChoixClicked("POSITION")'>Position</button><span id='TxtButPosition'>Position</span><br>
-  <button id="ButHorsIti" onclick='butChoixClicked("HORS ITI")'>Hors ITI</button><span id='TxtButHorsIti'>Hors Itinéraire</span><br>
-  <button id="ButRepas" onclick='butChoixClicked("REPAS")'>Repas</button><span id='TxtButRepas'>Repas</span><br>
-  <button id="ButBivouac" onclick='butChoixClicked("BIVOUAC")'>Bivouac</button><span id='TxtButBivouac'>Bivouac</span><br>
-  <button id="ButMemo" onclick='butChoixClicked("MEMO")'>Mémo</button><span id='TxtButMemo'>Mémorisation</span><br>
-
-  <!-- debug -->
-  <span id='TxtDebug'></span>
-  <!-- debug -->
+  <div id='DivParking'>  <button id="ButParking" onclick='butChoixClicked("PARKING")'>Parking</button><span id='TxtButParking'>Parking️️️</span><br> </div>
+  <div id='DivPosition'> <button id="ButPosition" onclick='butChoixClicked("POSITION")'>Position</button><span id='TxtButPosition'>Position</span><br> </div>
+  <div id='DivHorsIti'>  <button id="ButHorsIti" onclick='butChoixClicked("HORS ITI")'>Hors ITI</button><span id='TxtButHorsIti'>Hors Itinéraire</span><br> </div>
+  <div id='DivRepas'>    <button id="ButRepas" onclick='butChoixClicked("REPAS")'>Repas</button><span id='TxtButRepas'>Repas</span><br> </div>
+  <div id='DivBivouac'>  <button id="ButBivouac" onclick='butChoixClicked("BIVOUAC")'>Bivouac</button><span id='TxtButBivouac'>Bivouac</span><br> </div>
+  <div id='DivMemo'>     <button id="ButMemo" onclick='butChoixClicked("MEMO")'>Mémo</button><span id='TxtButMemo'>Mémorisation</span><br> </div>
   <br>
   <div id='DivVersionBarre'>
     <span id='TxtVersionActuelle'></span>
@@ -72,13 +68,27 @@
   </div>
   <div style='height: 60px;'></div>
 
-  <!-- Généraux -->
-  <div style='font-size: 1.2em;'><b>Paramètres généraux</b></div>
+  <!-- Visu GPX -->
+  <div style='font-size: 1.2em;'><b>Paramètres VisuGPX</b></div>
   ID VisuGPX
   <div style="display: flex; justify-content: space-between; align-items: center;">
     <input class='ZoneParamSaisie' type='text' id='TxtVisuGPX' placeholder="(10 caractères)"><br>
     <button id="ButCopierID" onclick="ButCopierIDClick()">Copier</button>
   </div>
+  <div style='height: 5px;'></div>
+    Icone pour "Position"<br>
+    <div>
+      <input type="radio" id="RadMarkerClassique"  name="TypeMarker" value="" checked>
+      <label for="RadMarkerClassique">Classique : </label>
+      <img src="imgPosition.png" alt="Position" style="vertical-align: middle; width: 25px; height: 25px;"><br>
+
+      <input type="radio" id="RadMarkerPerso" name="TypeMarker" value="">
+      <label for="RadMarkerPerso" style="vertical-align: middle;"
+      >Personnalisée :</label>
+      <input class='ZoneParamSaisie2' type='text' id='TxtMarkerPerso'
+             style="width: 120px; font-size: 1.5em; height: auto; display: inline-block; vertical-align: middle;"
+             value="🟩 (Toto)">
+    </div>
   <br>
 
   <!-- Géolocalisation -->
@@ -106,7 +116,7 @@
 
   <div>
     Choix du modèle par défaut<br>
-    <div style="margin-left: 20px; margin-top: 5px;">
+    <div>
       <input type="radio" id="RadArome"  name="modeleMeteo" value="AROME" checked>
       <label for="RadArome">AROME France</label><br>
 
@@ -132,29 +142,28 @@
   <input class='ZoneParamSaisie' type='text' id='TxtTaillePolice' value="14"><br>
   <div style='height: 5px;'></div>
 
-  Texte pour "Parking"
+  <input type="checkbox" id="ChkParking"  name="" value="" checked> Bouton "Parking"
   <input class='ZoneParamSaisie' type='text' id='TxtParking' value="Emplacement de la voiture"><br>
   <div style='height: 5px;'></div>
 
-  Texte pour "Position"
+  <input type="checkbox" id="ChkPosition"  name="" value="" checked> Bouton "Position"
   <input class='ZoneParamSaisie' type='text' id='TxtPosition' value="Position actuelle"><br>
   <div style='height: 5px;'></div>
 
-  Texte pour "Hors Iti"
+  <input type="checkbox" id="ChkHorsIti"  name="" value="" checked> Bouton "Hors Iti"
   <input class='ZoneParamSaisie' type='text' id='TxtHorsIti' value="Hors Itinéraire"><br>
   <div style='height: 5px;'></div>
 
-  Texte pour "Repas"
+  <input type="checkbox" id="ChkRepas"  name="" value="" checked> Bouton "Repas"
   <input class='ZoneParamSaisie' type='text' id='TxtRepas' value="Emplacement du repas"><br>
   <div style='height: 5px;'></div>
 
-  Texte pour "Bivouac"
+  <input type="checkbox" id="ChkBivouac"  name="" value="" checked> Bouton "Bivouac"
   <input class='ZoneParamSaisie' type='text' id='TxtBivouac' value="Emplacement du bivouac"><br>
   <div style='height: 5px;'></div>
 
-  Texte pour "Mémo"
+  <input type="checkbox" id="ChkMemo"  name="" value="" checked> Bouton "Mémo"
   <input class='ZoneParamSaisie' type='text' id='TxtMemo' value="Memorisation d'un message"><br>
-  <br>
   <br>
 
   <!-- Informations -->

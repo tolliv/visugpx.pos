@@ -73,7 +73,7 @@ function ButClearRequetesClicked()
 async function ButEnvoiRequetesClicked()
 {
   pid('TxtEnvoiRequetesStatut').innerHTML = "Envoi en cours ..<br>";
-  let lConnecte = navigator.onLine;
+  let lConnecte = IsConnected();
 
   // Pas connecté au réseau
   if (!lConnecte)
@@ -169,7 +169,7 @@ async function ButEnvoiRequetesClicked()
 //--------------------------------------------------------------------------------------------------
 async function EnvoiRequetes()
 {
-    let lConnecte = navigator.onLine;
+    let lConnecte = IsConnected();
 
     // Pas connecté au réseau
     if (!lConnecte)

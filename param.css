@@ -50,6 +50,15 @@
   color: blue;
 }
 
+.ZoneParamSaisie2
+{
+  width: 100%;
+  box-sizing: border-box;
+  border: none;
+  font-family: sans-serif;
+  color: blue;
+}
+
 #TxtCoordonnees
 {
   width: 80%;

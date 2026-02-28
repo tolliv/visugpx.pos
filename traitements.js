@@ -183,10 +183,20 @@ async function Localisation(pChoix, choixBouton)
       lNewReq += pid('TxtVisuGPX').value + ";";
       lNewReq += gGeoLatitude + ";";
       lNewReq += gGeoLongitude + ";";
+
+      // Spécifique pour Hors itinéraire
       if (pChoix == "HORS ITI")
       {
         lNewReq += "HI:Hors itinéraire<br>";
       }
+
+      // Spécifique pour icone personnalisée de Position
+      else if (pChoix == "POSITION")
+      {
+        if (pid('RadMarkerPerso').checked)
+          lNewReq += pid('TxtMarkerPerso').value + "<br>";
+      }
+
       lNewReq += jourSemaineCapitalise + " " + jourDuMois + " " + MoisTexte + " ";
       lNewReq += heureActuelle + ";";
 
@@ -206,12 +216,16 @@ async function Localisation(pChoix, choixBouton)
       lNewReq += lMessageBR + ";";
 
       // Icone
+      if (pid('RadMarkerClassique').checked)
+        lNewReq += (pChoix=="POSITION"?"person":"");
+      else
+        lNewReq += (pChoix=="POSITION"?"_":"");
       lNewReq += (pChoix=="PARKING"?"park":"");
-      lNewReq += (pChoix=="POSITION"?"person":"");
       lNewReq += (pChoix=="HORS ITI"?"__":"");
       lNewReq += (pChoix=="REPAS"?"restaurant":"");
       lNewReq += (pChoix=="BIVOUAC"?"camping":"");
       lNewReq += "¶";
+
 
       // Ajout nouvelle requête dans le buffer
       let lOldReq = localStorage.getItem('RequetesVisuGPX');

@@ -59,8 +59,7 @@ document.addEventListener('DOMContentLoaded', function()
   // Affichage de l'écran HOME
   AfficherEcranHOME();
 
-  //----- Actions automatiques pour le DEBUG -----
-  // ButMenuMeteoClicked();
+  //ButMenuParamClicked(); // Mode DEBUG : Actions automatiques (commenter si RELEASE)
 });
 
 //--------------------------------------------------------------------------------------------------
@@ -134,7 +133,7 @@ function getPlatform()
 //--------------------------------------------------------------------------------------------------
 function butChoixClicked(choix)
 {
-  // Flag de debug
+  // Flag de Simulation de géolocalisation
   if (pid('ChkSimulation').checked)
   {
     console.log("Mode Simulation activé");
@@ -216,6 +215,16 @@ async function butEffaceClicked()
   pid('ButEffacer').innerHTML = "Effacer";
   pid('ButEffacer').style.background = "#008";
   pid('ButEffacer').style.color = "#FFF";
+}
+
+//--------------------------------------------------------------------------------------------------
+// Connexion réseau
+//--------------------------------------------------------------------------------------------------
+function IsConnected()
+{
+  let lConnected = navigator.onLine;
+//  lConnected = false;     // Mode DEBUG : simulation pas de réseau (commenter si RELEASE)
+  return(lConnected);
 }
 
 //--------------------------------------------------------------------------------------------------
