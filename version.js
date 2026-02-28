@@ -1,1 +1,1 @@
-const VERSION = "2602.28a";
+const VERSION = "2602.28b";
