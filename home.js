@@ -67,6 +67,7 @@ document.addEventListener('DOMContentLoaded', function()
   AfficherEcranHOME();
 
   //ButMenuParamClicked(); // Mode DEBUG : Actions automatiques (commenter si RELEASE)
+  // AfficheEcranGestionEmplacements(); // Mode DEBUG : Actions automatiques (commenter si RELEASE)
 });
 
 //--------------------------------------------------------------------------------------------------

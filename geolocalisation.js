@@ -61,7 +61,7 @@ function GeolocalisationWatch(pPrecision)
     gGeoAccuracy = 10;
     gGeoLatitude = coord.lat;
     gGeoLongitude = coord.lon;
-    gGeoAltitude = 1800;
+    gGeoAltitude = 123;
     gGeoStatus = 0;
     return;
   }

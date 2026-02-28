@@ -39,7 +39,7 @@
     <b>Message à joindre :</b>
     <button id="ButEffacer" onclick='butEffaceClicked()'>Effacer</button>
   </div>
-  <textarea class='ZoneSaisie' id="TxtMessage" rows="6" placeholder="Entrez votre message..."></textarea>
+  <textarea class='ZoneSaisie' id="TxtMessage" rows="6" style='resize: none;' placeholder="Entrez votre message..."></textarea>
   <br>
   <div id='DivParking'>  <button id="ButParking" onclick='butChoixClicked("PARKING")'>Parking</button><span id='TxtButParking'>Parking️️️</span><br> </div>
   <div id='DivPosition'> <button id="ButPosition" onclick='butChoixClicked("POSITION")'>Position</button><span id='TxtButPosition'>Position</span><br> </div>
@@ -77,18 +77,20 @@
   </div>
   <div style='height: 5px;'></div>
     Icone pour "Position"<br>
-    <div>
-      <input type="radio" id="RadMarkerClassique"  name="TypeMarker" value="" checked>
-      <label for="RadMarkerClassique">Classique : </label>
-      <img src="imgPosition.png" alt="Position" style="vertical-align: middle; width: 25px; height: 25px;"><br>
 
-      <input type="radio" id="RadMarkerPerso" name="TypeMarker" value="">
-      <label for="RadMarkerPerso" style="vertical-align: middle;"
-      >Personnalisée :</label>
-      <input class='ZoneParamSaisie2' type='text' id='TxtMarkerPerso'
-             style="width: 120px; font-size: 1.5em; height: auto; display: inline-block; vertical-align: middle;"
-             value="🟩 (Toto)">
-    </div>
+  <div style='display: flex; align-items: center; gap: 5px; height: 28px;'>
+    <input type='radio' id='RadMarkerClassique' name='TypeMarker' value="" style='margin-left: 5px;' checked >
+    <span style='display: inline-block; margin-top: 2px;'>Classique :</span>
+    <img src='imgPosition.png' alt='Position' style='width: 22px; height: 24px; display: block; margin-top: 2px;'>
+  </div>
+
+  <div style='display: flex; align-items: center; gap: 5px; height: 30px;'>
+    <input type='radio' id='RadMarkerPerso' name='TypeMarker' value="" style='margin-left: 5px;'>
+    <span style='display: inline-block; margin-top: 2px;'>Personnalisée :</span>
+    <input class='ZoneParamSaisie2' type='text' id='TxtMarkerPerso'
+           style='width: 120px; font-size: 1.5em; display: inline-block; margin-bottom: 2px;'
+           value="🟩 (Toto)">
+  </div>
   <br>
 
   <!-- Géolocalisation -->
@@ -307,16 +309,20 @@
 <!----- ECRAN GESTION EMPLACEMENTS ----->
 <link rel='stylesheet' type='text/css' href='emplacements.css'>
 <div id="scrGestionEmplacements" style="display: none">
+
   <div id='BarreGestionEmplacementsHaut'>
     &nbsp;&nbsp;
-    <button id='ButGestionEmplacementsRetour' onclick='ButGestionEmplacementsRetourClick()'></button>
+    <button class='ClassButParam' id='ButParamAnnuler' onclick='ButGestionEmplacementsAnnulerClick()'></button>
+    &nbsp;
+    <button class='ClassButParam' id='ButParamValider' onclick='ButGestionEmplacementsValiderClick()'></button>
     &nbsp;&nbsp;
     <span id=TxtGestionEmplacementsTitre>Gestion des emplacements</span>
   </div>
+
   <div style='height: 60px;'></div>
-  <div id='DivListeLatLon'>
-    <span id='TxtListeLatLon'></span>
-  </div>
+  <b>Liste des emplacements :</b>
+  <textarea class='ZoneSaisie' id="TxtEmplacements" rows=25 style='resize: none; font-family: monospace;' placeholder="Paris : 48.8583, 2.2944"></textarea>
+  <br>
   <br>
 </div>
 
