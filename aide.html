@@ -1,8 +1,6 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
 <html><head>
-<meta content="text/html; charset=UTF-8" http-equiv="content-type"><title>Aide</title>
-
-</head>
+<meta content="text/html; charset=UTF-8" http-equiv="content-type"><title>Aide</title></head>
 <body>
 <font color="#330099"><big><b>Table des
 matières</b></big></font><br>
@@ -46,8 +44,8 @@ principales</b></big></font><br>
 - envoi de la position GPS et d'un message texte sur une trace de
 VisuGPX,<br>
 - gestion d'une feuille de route préparée à l'avance,<br>
-- affichage du bulletin météo des 5 prochains jours.<br>
-- mise à jour automatique<br>
+- affichage du bulletin météo des&nbsp;prochains jours,<br>
+- mise à jour automatique.<br>
 <br>
 <br>
 <font color="#330099"><big><b><a name="Prerequis"></a>3. Prérequis</b></big></font><br>
@@ -60,7 +58,7 @@ l'enregistrer avec ces paramètres :<br>
 - cocher <font color="#993399">Permettre la modification
 collaborative de la trace</font><br>
 Chaque trace créée possède un identificateur unique composé de 10
-lettres + chiffres, ce qui donne un lien à donner aux proches.<br>
+lettres + chiffres, pour former un lien à donner aux proches.<br>
 <u>Exemple</u> : https://www.visugpx.com/<b>47Grd6fvWR</b><br>
 <br>
 <u>Note</u> : c'est plus simple d'utiliser toujours le même
@@ -100,7 +98,7 @@ Cliquer sur la barre d'adresse du navigateur puis <font color="#993399">Partager
 les Web Applications qui n'ont pas été utilisées depuis plusieurs
 semaines.<br>
 Il n'y a pas de solution pour empêcher ça à part l'utiliser à la maison
-pour vérifier la météo locale de temps en temps !<br>
+fréquemment pour vérifier la météo locale de temps en temps !<br>
 <br>
 <br>
 <font color="#330099"><big><b><a name="InstallationWindows"></a>4.3 Installation sur
@@ -135,7 +133,7 @@ accessibles depuis les boutons situés en haut de l'écran Principal.<br>
 <br>
 <br>
 <font color="#330099"><big><b><a name="EcranPrincipal"></a>6.1 Ecran principal</b></big></font><br>
-L'écran principal porte bien son nom : c'est de là que l'on peut
+L'écran Principal porte bien son nom : c'est de là que l'on peut
 accéder&nbsp;à tous les autres écrans.<br>
 Il permet de lancer la géolocalisation puis d'envoyer la
 requête de positionnement à VisuGPX.<br>
@@ -145,16 +143,16 @@ placé sur l'itinéraire VisuGPX, ne sera pas le même (voir §VisuGPX).<br>
 <br>
 <u>Attention</u> : le bouton&nbsp;<font color="#993399">Mémo</font> n'envoie pas de requête à
 VisuGPX. Le message est juste mémorisé avec la géolocalisation dans
-l'écran Messages.<br>
+l'écran Messages.<br>Les messages restent en mémoire, même quand l'Application est fermée.<br>
 <br>
 Lors de l'appui sur l'un de ces boutons :<br>
 - la géolocalisation est activée jusqu'à descendre sous le seuil de
-précision ou si le temps imparti est écoulé (voir l'écran Paramètres)<br>
-- le message est mémorisé<br>
+précision ou si le temps imparti est écoulé (voir l'écran Paramètres),<br>
+- le message est mémorisé,<br>
 - s'il y a une connexion réseau, il y a une tentative d'envoi de la
 requête<br>
 - le bulletin météo est téléchargé par rapport à la géolocalisation qui
-vient d'être faite. Il est consultable en off-line dans l'écran Météo.<br>
+vient d'être faite.&nbsp;Il est mémorisé et il est consultable en off-line dans l'écran Météo.<br>
 <br>
 S'il n'y a pas de connexion réseau, ou si la requête n'aboutit pas,
 elle est mémorisée dans l'écran Requêtes.<br>
@@ -165,8 +163,8 @@ Requêtes pour la gestion des requêtes mémorisées).<br><br>
 <img alt="imgParam" src="imgParam.png" height="46" width="46"></b></big></font><br>
 Il permet de paramétrer l'application en fonction de ses besoins.<br>
 Les paramètres sont pris en compte en cliquant sur le bouton <font color="#993399">Valider</font>.<br>
-<br>
-<b>ID VisuGPX</b><br>
+<br><big><b>Paramètres VisuGPX</b></big><br>
+<font color="#3333ff"><b>ID VisuGPX</b></font><br>
 Identificateur de la trace créée dans VisuGPX.<br>
 Le bouton <font color="#993399">Copier</font>
 recopie&nbsp;l'adresse complète du lien VisuGPX dans le
@@ -176,8 +174,14 @@ vérifier si le lien est correct.<br>
 Il est conseillé de faire des tests avant de partir parce que vos
 proches vont s'inquiéter s'ils n'ont aucun marqueur&nbsp;positionné
 sur la carte au bout d'une semaine !<br>
-<br>
-<b>Seuil précision (m)</b><br>
+<br><font color="#3333ff"><b>Icone pour "Position"</b></font><br>
+Il s'agit du marqueur qui est envoyé à VisuGPX quand vous appuyez sur le bouton "Position".<br>Vous avez le choix entre classique (qui reprend le marqueur initial).<br>Ou
+vous avez la possibilité d'un marque personnalisé avec un texte. Dans
+ce cas, le premier caractère de ce texte sera affiché sur le marqueur. <br>Cela peut être une lettre, un chiffre ou un smiley.<br>Cette
+fonctionnalité est faite pour les sorties de groupe et voir différentes
+personnes sur la même carte quand il faut se rejoindre par exemple.<br>Il
+est possible d'utiliser un smiley avec un carré de couleur, avec chacun
+sa couleur pour se repérer plus facilement, comme par exemple :<br><span class="x19la9d6 x1fc57z9 x6ikm8r x10wlt62 x19co3pv x11tp94h xfibh0p xiy17q3 x1xsqp64 x1lkfr7t xexx8yu xyri2b x18d9i69 x1c1uobl" style="background-image: url(https://web.whatsapp.com/emoji/v1/16/0/1/single/w/40/01f7e5.png);"><span class="xrtxmta x1bhl96m">🟥</span></span><span class="x19la9d6 x1fc57z9 x6ikm8r x10wlt62 x19co3pv x11tp94h xfibh0p xiy17q3 x1xsqp64 x1lkfr7t xexx8yu xyri2b x18d9i69 x1c1uobl" style="background-image: url(https://web.whatsapp.com/emoji/v1/16/0/1/single/w/40/01f7e7.png);"><span class="xrtxmta x1bhl96m">🟧</span></span><span class="x19la9d6 x1fc57z9 x6ikm8r x10wlt62 x19co3pv x11tp94h xfibh0p xiy17q3 x1xsqp64 x1lkfr7t xexx8yu xyri2b x18d9i69 x1c1uobl" style="background-image: url(https://web.whatsapp.com/emoji/v1/16/0/1/single/w/40/01f7e8.png);"><span class="xrtxmta x1bhl96m">🟨</span></span><span class="x19la9d6 x1fc57z9 x6ikm8r x10wlt62 x19co3pv x11tp94h xfibh0p xiy17q3 x1xsqp64 x1lkfr7t xexx8yu xyri2b x18d9i69 x1c1uobl" style="background-image: url(https://web.whatsapp.com/emoji/v1/16/0/1/single/w/40/01f7e9.png);"><span class="xrtxmta x1bhl96m">🟩</span></span><span class="x19la9d6 x1fc57z9 x6ikm8r x10wlt62 x19co3pv x11tp94h xfibh0p xiy17q3 x1xsqp64 x1lkfr7t xexx8yu xyri2b x18d9i69 x1c1uobl" style="background-image: url(https://web.whatsapp.com/emoji/v1/16/0/1/single/w/40/01f7e6.png);"><span class="xrtxmta x1bhl96m">🟦</span></span><span class="x19la9d6 x1fc57z9 x6ikm8r x10wlt62 x19co3pv x11tp94h xfibh0p xiy17q3 x1xsqp64 x1lkfr7t xexx8yu xyri2b x18d9i69 x1c1uobl" style="background-image: url(https://web.whatsapp.com/emoji/v1/16/0/1/single/w/40/01f7ea.png);"><span class="xrtxmta x1bhl96m">🟪</span></span><span class="x19la9d6 x1fc57z9 x6ikm8r x10wlt62 x19co3pv x11tp94h xfibh0p xiy17q3 x1xsqp64 x1lkfr7t xexx8yu xyri2b x18d9i69 x1c1uobl" style="background-image: url(https://web.whatsapp.com/emoji/v1/16/0/1/single/w/40/002b1b.png);"><span class="xrtxmta x1bhl96m">⬛</span></span><span class="x19la9d6 x1fc57z9 x6ikm8r x10wlt62 x19co3pv x11tp94h xfibh0p xiy17q3 x1xsqp64 x1lkfr7t xexx8yu xyri2b x18d9i69 x1c1uobl" style="background-image: url(https://web.whatsapp.com/emoji/v1/16/0/1/single/w/40/002b1c.png);"><span class="xrtxmta x1bhl96m">⬜</span></span><span class="x19la9d6 x1fc57z9 x6ikm8r x10wlt62 x19co3pv x11tp94h xfibh0p xiy17q3 x1xsqp64 x1lkfr7t xexx8yu xyri2b x18d9i69 x1c1uobl" style="background-image: url(https://web.whatsapp.com/emoji/v1/16/0/1/single/w/40/01f7eb.png);"><span class="xrtxmta x1bhl96m">🟫</span></span><br><br><font color="#3333ff"><b>Seuil précision (m)</b></font><br>
 Précision du récepteur GPS pour valider la position. L'Application
 boucle sur la Géolocalisation tant que cette distance n'est pas
 atteinte<br>
@@ -186,27 +190,27 @@ retrouvent dans ce rayon.<br>
 En mettant une valeur trop faible (4 mètres), le récepteur risque de ne
 pas atteindre cette précision.<br>
 <br>
-<b>Temps maximal pour la géolocalisation (s)</b><br>
+<font color="#3333ff"><b>Temps maximal pour la géolocalisation (s)</b></font><br>
 Pour limiter la durée de la recherche de position.<br>
 30 secondes est une bonne valeur. A augmenter si le récepteur de votre
 smarphone est un peu vieux, ou si vous vous trouvez dans une grotte.<br>
 <br>
-<b>Simulation de la géolocalisation</b><br>
+<font color="#3333ff"><b>Simulation de la géolocalisation</b></font><br>
 Peut servir à faire des tests sur un système (PC Windows) qui ne
 possède pas de récepteur GPS, en forçant des coordonnées.<br>
 Exemple pour la Tour Eiffel : <font color="#993399">48.85826187,2.29449563</font><br>
 <br>
-<b>Seuil de vent (km/h)</b><br>
+<font color="#3333ff"><b>Seuil de vent (km/h)</b></font><br>
 Colore les prévisions de vent supérieures ou égales à ce seuil, sur la
 page Météo.<br>
 <br>
-<b>Taille de la police</b><br>
+<font color="#3333ff"><b>Taille de la police</b></font><br>
 Affecte tous les textes de tous les écrans. <br>
 La valeur doit être comprise entre 10 et 24.<br>
 <u>Note</u> : la taille de la police de Aide peut être
 modifiée spécifiquement sur l'écran éponyme.<br>
 <br>
-<b>Texte pour Parking, Position, Hors ITI, Repas, Bivouac</b><br>
+<font color="#3333ff"><b>Texte pour Parking, Position, Hors ITI, Repas, Bivouac</b></font><br>
 Texte qui apparait sur l'interface mais aussi dans les Messages et sur
 le site VisuGPX.<br>
 <u>Note</u> : des smileys peuvent être utilisés, essayez,
