@@ -119,18 +119,6 @@
   background-image: url('imgEmplacements.png');
 }
 
-#scrMeteo
-{
-}
-
-#TxtMeteoInfos
-{
-}
-
-#TxtMeteo
-{
-}
-
 /*------------------------------------------------------------------------------------------------*/
 /* Tableau pour le résumé des jours */
 .TableMeteoSemaine
@@ -321,4 +309,10 @@
   overflow-y:auto;
   border:2px solid #000;
   box-shadow: 0 0 10px rgba(0,0,0,0.5);;
+}
+
+.Legendes
+{
+  font-size: 1em;
+  font-weight: normal;
 }

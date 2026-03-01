@@ -541,7 +541,7 @@ async function DisplayBulletin(data)
   HTMLJ += "</table>";
 
   // Affichage des légendes
-  Legendes();
+  LegendesHeures();
 
   // Affichage de la page
   pid('TxtMeteo').innerHTML = HTMLJ;
@@ -726,10 +726,10 @@ async function DisplayBulletin(data)
       case "Sa": lJour2lettres = "Di"; break;
     }
   }
-  HTMLJ += "</table></b>";
+  HTMLJ += "</table>";
 
   // Affichage des légendes
-  Legendes();
+  LegendesJours();
 
   // Affichage de la page
   pid('TxtResume').innerHTML = HTMLJ;
@@ -792,11 +792,12 @@ function ConversionDirection(pDegres)
 //-------------------------------------------------------
 // Création des légendes
 //-------------------------------------------------------
-function Legendes()
+function LegendesHeures()
 {
+  HTMLJ += "<div class='Legendes'>";
   HTMLJ += "<br><b>Légendes</b><br>";
   HTMLJ += "<span style='display: inline-block; width:50px;'><b>&nbsp;HR</b></span> Heure<br>";
-  HTMLJ += "<span style='display: inline-block; width:50px;'><b>&nbsp;Ciel</b></span> Etat du ciel (mélange de ces couleurs)<br>";
+  HTMLJ += "<span style='display: inline-block; width:50px;'><b>&nbsp;Ciel</b></span> Etat du ciel<br>";
   HTMLJ += "&nbsp;&nbsp;&nbsp;<span style='display: inline-block; width:50px;'><span style='font-family: monospace;background-color: "+SOLEI+";'>&nbsp;&nbsp;</span></span><small>Dégagé</small><br>";
   HTMLJ += "<div style='height: 2px;'></div>";
   HTMLJ += "&nbsp;&nbsp;&nbsp;<span style='display: inline-block; width:50px;'><span style='font-family: monospace;background-color: "+NUAGE+";'>&nbsp;&nbsp;</span></span><small>Nuageux</small><br>";
@@ -814,6 +815,29 @@ function Legendes()
   HTMLJ += "<span style='display: inline-block; width:50px;'><b>&nbsp;Préci.</b></span> Précipitations et risque (pluie, neige)<br>";
   HTMLJ += "<span style='display: inline-block; width:50px;'><b>&nbsp;Vent</b></span> Vent et direction<br>";
   HTMLJ += "<span style='display: inline-block; width:50px;'><b>&nbsp;Dir</b></span> Direction du vent<br>";
+  HTMLJ += "</div>";
+}
+function LegendesJours()
+{
+  HTMLJ += "<div class='Legendes'>";
+  HTMLJ += "<br><b>Légendes</b><br>";
+  HTMLJ += "<span style='display: inline-block; width:50px;'><b>&nbsp;J</b></span> Jour<br>";
+  HTMLJ += "<span style='display: inline-block; width:50px;'><b>&nbsp;T</b></span> Températures min et max<br>";
+  HTMLJ += "<span style='display: inline-block; width:50px;'><b>&nbsp;00-..</b></span> Etat du ciel en fonction de l'heure<br>";
+  HTMLJ += "&nbsp;&nbsp;&nbsp;<span style='display: inline-block; width:50px;'><span style='font-family: monospace;background-color: "+SOLEI+";'>&nbsp;&nbsp;</span></span><small>Dégagé</small><br>";
+  HTMLJ += "<div style='height: 2px;'></div>";
+  HTMLJ += "&nbsp;&nbsp;&nbsp;<span style='display: inline-block; width:50px;'><span style='font-family: monospace;background-color: "+NUAGE+";'>&nbsp;&nbsp;</span></span><small>Nuageux</small><br>";
+  HTMLJ += "<div style='height: 2px;'></div>";
+  HTMLJ += "&nbsp;&nbsp;&nbsp;<span style='display: inline-block; width:50px;'><span style='font-family: monospace;background-color: "+BROUI+";'>&nbsp;&nbsp;</span></span><small>Brouillard</small><br>";
+  HTMLJ += "<div style='height: 2px;'></div>";
+  HTMLJ += "&nbsp;&nbsp;&nbsp;<span style='display: inline-block; width:50px;'><span style='font-family: monospace;background-color: "+PLUIE+";'>&nbsp;&nbsp;</span></span><small>Pluie</small><br>";
+  HTMLJ += "<div style='height: 2px;'></div>";
+  HTMLJ += "&nbsp;&nbsp;&nbsp;<span style='display: inline-block; width:50px;'><span style='font-family: monospace;background-color: "+ORAGE+";'>&nbsp;&nbsp;</span></span><small>Orage</small><br>";
+  HTMLJ += "<div style='height: 2px;'></div>";
+  HTMLJ += "&nbsp;&nbsp;&nbsp;<span style='display: inline-block; width:50px;'><span style='font-family: monospace;background-color: "+NEIGE+";'>&nbsp;&nbsp;</span></span><small>Neige</small><br>";
+  HTMLJ += "<span style='display: inline-block; width:50px;'><b>&nbsp;P</b></span> Précipitations (pluie, neige)<br>";
+  HTMLJ += "<span style='display: inline-block; width:50px;'><b>&nbsp;V</b></span> Vent<br>";
+  HTMLJ += "</div>";
 }
 
 //-------------------------------------------------------
