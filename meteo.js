@@ -245,22 +245,23 @@ function GetMeasures(index)
 //-------------------------------------------------------
 // Affiche le bulletin passé en paramètre
 //-------------------------------------------------------
+// Defines pour les couleurs
+const RISQUE = "#ADF";
+const SOLEI = "#FA0";
+const NUAGE = "#AAA";
+const PLUIE = "#00F";
+const NEIGE = "#FCF";
+const ORAGE = "#808";
+const BROUI = "#333";
+const WC_SOLEI = "<span style='background-color: "+SOLEI+";'>&nbsp;</span>";
+const WC_NEIGE = "<span style='background-color: "+NEIGE+ ";'>&nbsp;</span>";
+const WC_PLUIE = "<span style='background-color: "+PLUIE+ ";'>&nbsp;</span>";
+const WC_NUAGE = "<span style='background-color: "+NUAGE+ ";'>&nbsp;</span>";
+const WC_ORAGE = "<span style='background-color: "+ORAGE+ ";'>&nbsp;</span>";
+const WC_BROUI = "<span style='background-color: "+BROUI+ ";'>&nbsp;</span>";
+let   HTMLJ;
 async function DisplayBulletin(data)
 {
-  // Defines pour les couleurs
-  const RISQUE = "#ADF";
-  const SOLEI = "#FA0";
-  const NUAGE = "#AAA";
-  const PLUIE = "#00F";
-  const NEIGE = "#FCF";
-  const ORAGE = "#808";
-  const BROUI = "#333";
-  const WC_SOLEI = "<span style='background-color: "+SOLEI+";'>&nbsp;</span>";
-  const WC_NEIGE = "<span style='background-color: "+NEIGE+ ";'>&nbsp;</span>";
-  const WC_PLUIE = "<span style='background-color: "+PLUIE+ ";'>&nbsp;</span>";
-  const WC_NUAGE = "<span style='background-color: "+NUAGE+ ";'>&nbsp;</span>";
-  const WC_ORAGE = "<span style='background-color: "+ORAGE+ ";'>&nbsp;</span>";
-  const WC_BROUI = "<span style='background-color: "+BROUI+ ";'>&nbsp;</span>";
 
   // Date et heure d'aujourd'hui pour les comparaisons
   const today = new Date();
@@ -307,7 +308,6 @@ async function DisplayBulletin(data)
   const lAltitudeBulletin = Math.round(data.elevation);
   const lEmplacementBulletin = localStorage.getItem("EmplacementBulletin");
   let   lTempResult;
-  let   HTMLJ;
 
   // Affiche la couleur du modèle actuel
   CouleurModele();
@@ -541,26 +541,9 @@ async function DisplayBulletin(data)
   HTMLJ += "</table>";
 
   // Affichage des légendes
-  HTMLJ += "<br><b>Légendes</b><br>";
-  HTMLJ += "<span style='display: inline-block; width:50px;'><b>&nbsp;HR</b></span> Heure<br>";
-  HTMLJ += "<span style='display: inline-block; width:50px;'><b>&nbsp;Ciel</b></span> Etat du ciel (mélange de ces couleurs)<br>";
-  HTMLJ += "&nbsp;&nbsp;&nbsp;<span style='display: inline-block; width:50px;'><span style='font-family: monospace;background-color: "+SOLEI+";'>&nbsp;&nbsp;</span></span><small>Dégagé</small><br>";
-  HTMLJ += "<div style='height: 2px;'></div>";
-  HTMLJ += "&nbsp;&nbsp;&nbsp;<span style='display: inline-block; width:50px;'><span style='font-family: monospace;background-color: "+NUAGE+";'>&nbsp;&nbsp;</span></span><small>Nuageux</small><br>";
-  HTMLJ += "<div style='height: 2px;'></div>";
-  HTMLJ += "&nbsp;&nbsp;&nbsp;<span style='display: inline-block; width:50px;'><span style='font-family: monospace;background-color: "+BROUI+";'>&nbsp;&nbsp;</span></span><small>Brouillard</small><br>";
-  HTMLJ += "<div style='height: 2px;'></div>";
-  HTMLJ += "&nbsp;&nbsp;&nbsp;<span style='display: inline-block; width:50px;'><span style='font-family: monospace;background-color: "+PLUIE+";'>&nbsp;&nbsp;</span></span><small>Pluie</small><br>";
-  HTMLJ += "<div style='height: 2px;'></div>";
-  HTMLJ += "&nbsp;&nbsp;&nbsp;<span style='display: inline-block; width:50px;'><span style='font-family: monospace;background-color: "+ORAGE+";'>&nbsp;&nbsp;</span></span><small>Orage</small><br>";
-  HTMLJ += "<div style='height: 2px;'></div>";
-  HTMLJ += "&nbsp;&nbsp;&nbsp;<span style='display: inline-block; width:50px;'><span style='font-family: monospace;background-color: "+NEIGE+";'>&nbsp;&nbsp;</span></span><small>Neige</small><br>";
-  HTMLJ += "<span style='display: inline-block; width:50px;'><b>&nbsp;T</b></span> Température réelle<br>";
-  HTMLJ += "<span style='display: inline-block; width:50px;'><b>&nbsp;Tres</b></span> Température ressentie<br>";
-  HTMLJ += "<span style='display: inline-block; width:50px;'><b>&nbsp;Hum</b></span> Humidité<br>";
-  HTMLJ += "<span style='display: inline-block; width:50px;'><b>&nbsp;Préci.</b></span> Précipitations et risque (pluie, neige)<br>";
-  HTMLJ += "<span style='display: inline-block; width:50px;'><b>&nbsp;Vent</b></span> Vent et direction<br>";
-  HTMLJ += "<span style='display: inline-block; width:50px;'><b>&nbsp;Dir</b></span> Direction du vent<br>";
+  Legendes();
+
+  // Affichage de la page
   pid('TxtMeteo').innerHTML = HTMLJ;
 
   //================================================================================================
@@ -743,7 +726,12 @@ async function DisplayBulletin(data)
       case "Sa": lJour2lettres = "Di"; break;
     }
   }
-  HTMLJ += "</table>";
+  HTMLJ += "</table></b>";
+
+  // Affichage des légendes
+  Legendes();
+
+  // Affichage de la page
   pid('TxtResume').innerHTML = HTMLJ;
 
   // Tout le traitement est fini, on peut afficher la page
@@ -799,6 +787,33 @@ function ConversionDirection(pDegres)
     pDegres = (parseFloat(pDegres) % 360 + 360) % 360;
     const lIndex = Math.round(pDegres / 45) % 16;
     return ("<span>" + lPointsCardinaux[lIndex]) + "</span>";
+}
+
+//-------------------------------------------------------
+// Création des légendes
+//-------------------------------------------------------
+function Legendes()
+{
+  HTMLJ += "<br><b>Légendes</b><br>";
+  HTMLJ += "<span style='display: inline-block; width:50px;'><b>&nbsp;HR</b></span> Heure<br>";
+  HTMLJ += "<span style='display: inline-block; width:50px;'><b>&nbsp;Ciel</b></span> Etat du ciel (mélange de ces couleurs)<br>";
+  HTMLJ += "&nbsp;&nbsp;&nbsp;<span style='display: inline-block; width:50px;'><span style='font-family: monospace;background-color: "+SOLEI+";'>&nbsp;&nbsp;</span></span><small>Dégagé</small><br>";
+  HTMLJ += "<div style='height: 2px;'></div>";
+  HTMLJ += "&nbsp;&nbsp;&nbsp;<span style='display: inline-block; width:50px;'><span style='font-family: monospace;background-color: "+NUAGE+";'>&nbsp;&nbsp;</span></span><small>Nuageux</small><br>";
+  HTMLJ += "<div style='height: 2px;'></div>";
+  HTMLJ += "&nbsp;&nbsp;&nbsp;<span style='display: inline-block; width:50px;'><span style='font-family: monospace;background-color: "+BROUI+";'>&nbsp;&nbsp;</span></span><small>Brouillard</small><br>";
+  HTMLJ += "<div style='height: 2px;'></div>";
+  HTMLJ += "&nbsp;&nbsp;&nbsp;<span style='display: inline-block; width:50px;'><span style='font-family: monospace;background-color: "+PLUIE+";'>&nbsp;&nbsp;</span></span><small>Pluie</small><br>";
+  HTMLJ += "<div style='height: 2px;'></div>";
+  HTMLJ += "&nbsp;&nbsp;&nbsp;<span style='display: inline-block; width:50px;'><span style='font-family: monospace;background-color: "+ORAGE+";'>&nbsp;&nbsp;</span></span><small>Orage</small><br>";
+  HTMLJ += "<div style='height: 2px;'></div>";
+  HTMLJ += "&nbsp;&nbsp;&nbsp;<span style='display: inline-block; width:50px;'><span style='font-family: monospace;background-color: "+NEIGE+";'>&nbsp;&nbsp;</span></span><small>Neige</small><br>";
+  HTMLJ += "<span style='display: inline-block; width:50px;'><b>&nbsp;T</b></span> Température réelle<br>";
+  HTMLJ += "<span style='display: inline-block; width:50px;'><b>&nbsp;Tres</b></span> Température ressentie<br>";
+  HTMLJ += "<span style='display: inline-block; width:50px;'><b>&nbsp;Hum</b></span> Humidité<br>";
+  HTMLJ += "<span style='display: inline-block; width:50px;'><b>&nbsp;Préci.</b></span> Précipitations et risque (pluie, neige)<br>";
+  HTMLJ += "<span style='display: inline-block; width:50px;'><b>&nbsp;Vent</b></span> Vent et direction<br>";
+  HTMLJ += "<span style='display: inline-block; width:50px;'><b>&nbsp;Dir</b></span> Direction du vent<br>";
 }
 
 //-------------------------------------------------------
