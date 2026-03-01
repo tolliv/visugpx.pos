@@ -8,6 +8,8 @@ const ASSETS = [
   'apple-touch-icon.png',
   'edit.css',
   'edit.js',
+  'emplacements.css',
+  'emplacements.js',
   'favicon.ico',
   'favicon-16x16.png',
   'favicon-32x32.png',

@@ -1,0 +1,25 @@
+Pour créer un nouveau projet
+----------------------------
+git init
+git add .
+git commit -m "Initial commit"
+git branch -M main
+git remote add origin https://github.com/tolliv/visugpx.pos.git
+
+Puis :
+------ 
+git status                : pour voir les changements
+git add .                 : pour ajouter tout le répertoire à envoyer
+git commit -m "Commit"    : envoi dans le cache local
+git push origin main      : envoi sur github
+
+
+Exemple de batch à mettre dans le répertoire :
+
+@echo off
+set msg=Auto-update %date% %time%
+c:\git\bin\git status
+c:\git\bin\git add .
+c:\git\bin\git commit -m "%msg%"
+c:\git\bin\git push origin main
+echo Mise a jour envoyee avec le message : %msg%
