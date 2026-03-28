@@ -246,7 +246,7 @@ function GetMeasures(index)
 // Affiche le bulletin passé en paramètre
 //-------------------------------------------------------
 // Defines pour les couleurs
-const RISQUE = "#ADF";
+const RISQU = "#ADF";
 const SOLEI = "#FA0";
 const NUAGE = "#AAA";
 const PLUIE = "#00F";
@@ -255,6 +255,7 @@ const ORAGE = "#808";
 const BROUI = "#333";
 const WC_SOLEI = "<span style='background-color: "+SOLEI+";'>&nbsp;</span>";
 const WC_NEIGE = "<span style='background-color: "+NEIGE+ ";'>&nbsp;</span>";
+const WC_RISQU = "<span style='background-color: "+RISQU+ ";'>&nbsp;</span>";
 const WC_PLUIE = "<span style='background-color: "+PLUIE+ ";'>&nbsp;</span>";
 const WC_NUAGE = "<span style='background-color: "+NUAGE+ ";'>&nbsp;</span>";
 const WC_ORAGE = "<span style='background-color: "+ORAGE+ ";'>&nbsp;</span>";
@@ -813,38 +814,51 @@ async function DisplayBulletin(data)
         for (let j = 0; j < 6; j++)
         {
           GetMeasures(i*24 + lQuart*6 + j);
+          let lWC = "";
           switch(gWeather_code)
           {
-            case 0:  lWeatherCodeText += WC_SOLEI;  break;
-            case 1:  lWeatherCodeText += WC_SOLEI;  break;
-            case 2:  lWeatherCodeText += WC_NUAGE;  break;
-            case 3:  lWeatherCodeText += WC_NUAGE;  break;
-            case 45: lWeatherCodeText += WC_BROUI;  break;
-            case 48: lWeatherCodeText += WC_BROUI;  break;
-            case 51: lWeatherCodeText += WC_PLUIE;  break;
-            case 53: lWeatherCodeText += WC_PLUIE;  break;
-            case 55: lWeatherCodeText += WC_PLUIE;  break;
-            case 56: lWeatherCodeText += WC_PLUIE;  break;
-            case 57: lWeatherCodeText += WC_PLUIE;  break;
-            case 61: lWeatherCodeText += WC_PLUIE;  break;
-            case 63: lWeatherCodeText += WC_PLUIE;  break;
-            case 65: lWeatherCodeText += WC_PLUIE;  break;
-            case 66: lWeatherCodeText += WC_PLUIE;  break;
-            case 67: lWeatherCodeText += WC_PLUIE;  break;
-            case 71: lWeatherCodeText += WC_NEIGE;  break;
-            case 73: lWeatherCodeText += WC_NEIGE;  break;
-            case 75: lWeatherCodeText += WC_NEIGE;  break;
-            case 77: lWeatherCodeText += WC_NEIGE;  break;
-            case 80: lWeatherCodeText += WC_PLUIE;  break;
-            case 81: lWeatherCodeText += WC_PLUIE;  break;
-            case 82: lWeatherCodeText += WC_PLUIE;  break;
-            case 85: lWeatherCodeText += WC_NEIGE;  break;
-            case 86: lWeatherCodeText += WC_NEIGE;  break;
-            case 95: lWeatherCodeText += WC_ORAGE;  break;
-            case 96: lWeatherCodeText += WC_ORAGE;  break;
-            case 99: lWeatherCodeText += WC_ORAGE;  break;
-            default: lWeatherCodeText += "?";       break;
+            case 0:  lWC += WC_SOLEI;  break;
+            case 1:  lWC += WC_SOLEI;  break;
+            case 2:  lWC += WC_NUAGE;  break;
+            case 3:  lWC += WC_NUAGE;  break;
+            case 45: lWC += WC_BROUI;  break;
+            case 48: lWC += WC_BROUI;  break;
+            case 51: lWC += WC_PLUIE;  break;
+            case 53: lWC += WC_PLUIE;  break;
+            case 55: lWC += WC_PLUIE;  break;
+            case 56: lWC += WC_PLUIE;  break;
+            case 57: lWC += WC_PLUIE;  break;
+            case 61: lWC += WC_PLUIE;  break;
+            case 63: lWC += WC_PLUIE;  break;
+            case 65: lWC += WC_PLUIE;  break;
+            case 66: lWC += WC_PLUIE;  break;
+            case 67: lWC += WC_PLUIE;  break;
+            case 71: lWC += WC_NEIGE;  break;
+            case 73: lWC += WC_NEIGE;  break;
+            case 75: lWC += WC_NEIGE;  break;
+            case 77: lWC += WC_NEIGE;  break;
+            case 80: lWC += WC_PLUIE;  break;
+            case 81: lWC += WC_PLUIE;  break;
+            case 82: lWC += WC_PLUIE;  break;
+            case 85: lWC += WC_NEIGE;  break;
+            case 86: lWC += WC_NEIGE;  break;
+            case 95: lWC += WC_ORAGE;  break;
+            case 96: lWC += WC_ORAGE;  break;
+            case 99: lWC += WC_ORAGE;  break;
+            default: lWC += "?";       break;
           }
+
+          // Affichage du risque pluie si SOLEIL ou NUAGE
+          if (gPrecipitation > 0)
+              lWC = WC_PLUIE;                                          // Remplacement
+          else if ( (lWC == WC_SOLEI) || (lWC == WC_NUAGE))
+          {
+            if (gPrecipitation_probability > 25)
+              lWC = WC_RISQU;                                          // Remplacement
+          }
+
+          // Ajout du code de l'heure, une fois remplacé
+          lWeatherCodeText += lWC;
         }
         lWeatherCodeText = lWeatherCodeTextDebut + lWeatherCodeText + lWeatherCodeTextFin;
 
@@ -1026,6 +1040,8 @@ function LegendesJours()
   HTMLJ += "&nbsp;&nbsp;&nbsp;<span style='display: inline-block; width:50px;'><span style='font-family: monospace;background-color: "+NUAGE+";'>&nbsp;&nbsp;</span></span><small>Nuageux</small><br>";
   HTMLJ += "<div style='height: 2px;'></div>";
   HTMLJ += "&nbsp;&nbsp;&nbsp;<span style='display: inline-block; width:50px;'><span style='font-family: monospace;background-color: "+BROUI+";'>&nbsp;&nbsp;</span></span><small>Brouillard</small><br>";
+  HTMLJ += "<div style='height: 2px;'></div>";
+  HTMLJ += "&nbsp;&nbsp;&nbsp;<span style='display: inline-block; width:50px;'><span style='font-family: monospace;background-color: "+RISQU+";'>&nbsp;&nbsp;</span></span><small>Risque pluie > 25%</small><br>";
   HTMLJ += "<div style='height: 2px;'></div>";
   HTMLJ += "&nbsp;&nbsp;&nbsp;<span style='display: inline-block; width:50px;'><span style='font-family: monospace;background-color: "+PLUIE+";'>&nbsp;&nbsp;</span></span><small>Pluie</small><br>";
   HTMLJ += "<div style='height: 2px;'></div>";
