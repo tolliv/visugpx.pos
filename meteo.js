@@ -315,7 +315,6 @@ async function DisplayBulletin(data)
   // Récupération les mesures pour sunrise et sunset
   GetMeasures(0);
 
-
   // Affichage informations pour ce bulletin
   HTMLJ = "";
   HTMLJ += "<b><span style='font-size:1.1em;'><u>Bulletin du <span style='color: #00f'>" + lDateFormatee + "</span> à <span style='color: #00f'>" + lHeureFormatee + "</span><br></u></b><span>";
@@ -377,15 +376,15 @@ async function DisplayBulletin(data)
       HTMLJ += "<br><div style='height: 4px;'></div>";
       HTMLJ += "<table class='TableMeteoJours'>";
       HTMLJ += "<tr>";
-      HTMLJ += "<td class='TH'><b>HR</b><br>h</td>";
-      HTMLJ += "<td class='TH'><b>Ciel</b><br>-</td>";
-      HTMLJ += "<td class='TH'><b>T</b><br>°C</td>";
-      HTMLJ += "<td class='TH'><b>Tres</b><br>°C</td>";
-      HTMLJ += "<td class='TH'><b>Hum</b><br>%</td>";
-      HTMLJ += "<td class='TH-DOUBLE'><b>Préci.</b><br>-</td>";
-      HTMLJ += "<td class='TH'><b>Vent</b><br>km/h</td>";
-      HTMLJ += "<td class='TH'><b>Dir</b><br>-</td>";
-      HTMLJ += "<td class='TH'><b>Raf</b><br>km/h</td>";
+      HTMLJ += "<td class='TH'><b>H</b></td>";
+      HTMLJ += "<td class='TH'><b>Ciel</b></td>";
+      HTMLJ += "<td class='TH'><b>T</b></td>";
+      HTMLJ += "<td class='TH'><b>Tres</b></td>";
+      HTMLJ += "<td class='TH'><b>Hum</b></td>";
+      HTMLJ += "<td class='TH-DOUBLE'><b>Préci.</b></td>";
+      HTMLJ += "<td class='TH'><b>Vent</b></td>";
+      HTMLJ += "<td class='TH'><b>Dir</b></td>";
+      HTMLJ += "<td class='TH'><b>Raf</b></td>";
       HTMLJ += "</tr>";
     }
 
@@ -527,7 +526,7 @@ async function DisplayBulletin(data)
 
     // Gusts du vent
     if (lGustsVent >= gSeuilVent)
-        HTMLJ += "<td class='VT'>" + lGustsVent + "</td>";
+        HTMLJ += "<td class='VTR'>" + lGustsVent + "</td>";
     else if (i == lHourIndex)
       HTMLJ += "<td class='HR'>" + lGustsVent + "</td>";
     else
@@ -546,15 +545,17 @@ async function DisplayBulletin(data)
   // Affichage de la page
   pid('TxtMeteo').innerHTML = HTMLJ;
 
+
   //================================================================================================
-  // Création de la page Résumé jour par jour
+  // Création de la page Résumé jour par jour, valeurs NORMALES
   HTMLJ = "";
-  HTMLJ += "<div style='height: 25px;'></div>";
-  HTMLJ += "<b>Prévision des prochains jours<b><br>";
-  HTMLJ += "<div style='height: 5px;'></div>";
-  HTMLJ += "<table class='TableMeteoSemaine'>";
 
   // Entête
+  HTMLJ += "<div style='height: 25px;'></div>";
+  HTMLJ += "<b>Prévision des prochains jours, valeurs NORMALES</b><br>";
+  HTMLJ += "<i>Températures réelles, vitesse du vent moyenne</i>";
+  HTMLJ += "<div style='height: 5px;'></div>";
+  HTMLJ += "<table class='TableMeteoSemaine'>";
   HTMLJ += "<tr>";
   HTMLJ += "<td class='RH' style='width: 10%;'><b>J</b></td>";
   HTMLJ += "<td class='RH' style='width: 18%;'><b>T</b></td>";
@@ -567,166 +568,363 @@ async function DisplayBulletin(data)
   HTMLJ += "</tr>";
 
   //----- Boucle sur les jours---------------------------------
-  // Jour du bulletin
-  let lJour2lettres = lJourLettresBulletin.substring(0, 2);
-  for (let i = 0; i < 14; i++)
+  do /* Boucle unique */
   {
-    // Calculs pour ce jour
-    let lTempMin = +999;
-    let lTempMax = -999;
-    let lCumulPluie = 0;
-    let lMaxVent = 0;
-
-    // Boucle sur les heures
-    for (let j = 0; j < 24; j++)
+    // Jour du bulletin
+    let lJour2lettres = lJourLettresBulletin.substring(0, 2);
+    for (let i = 0; i < 14; i++)
     {
-      GetMeasures(i*24 + j);
+      // Calculs pour ce jour
+      let lTempMin = +999;
+      let lTempMax = -999;
+      let lCumulPluie = 0;
+      let lMaxVent = 0;
 
-      // Température min
-      if (gTemperature_2m < lTempMin)
-        lTempMin = gTemperature_2m;
+      // Boucle sur les heures
+      for (let j = 0; j < 24; j++)
+      {
+        GetMeasures(i*24 + j);
 
-      // Température max
-      if (gTemperature_2m > lTempMax)
-        lTempMax = gTemperature_2m;
+        // Température min
+        if (gTemperature_2m < lTempMin)
+          lTempMin = gTemperature_2m;
+
+        // Température max
+        if (gTemperature_2m > lTempMax)
+          lTempMax = gTemperature_2m;
+
+        // Pluie
+        lCumulPluie += gPrecipitation;
+
+        // Vent
+        if (gWind_speed_10m > lMaxVent)
+          lMaxVent = gWind_speed_10m;
+      }
+
+      // Calculs Weather
+      // Boucle sur les quarts de cette journée journée
+      let lWeather0_6 = 0;
+      let lWeather6_12 = 0;
+      let lWeather12_18 = 0;
+      let lWeather18_24 = 0;
+      for (let lQuart = 0; lQuart < 4; lQuart++)
+      {
+        let lSoleil = 0;
+        let lNuage = 0;
+        let lPluie = 0;
+        let lNeige = 0;
+        let lOrage = 0;
+        let lBrouillard = 0;
+
+        // Boucle sur 6 heures
+        const lWeatherCodeTextDebut = "<td class='CIEL'>";
+        const lWeatherCodeTextFin = "</td>";
+        let lWeatherCodeText = "";
+        for (let j = 0; j < 6; j++)
+        {
+          GetMeasures(i*24 + lQuart*6 + j);
+          switch(gWeather_code)
+          {
+            case 0:  lWeatherCodeText += WC_SOLEI;  break;
+            case 1:  lWeatherCodeText += WC_SOLEI;  break;
+            case 2:  lWeatherCodeText += WC_NUAGE;  break;
+            case 3:  lWeatherCodeText += WC_NUAGE;  break;
+            case 45: lWeatherCodeText += WC_BROUI;  break;
+            case 48: lWeatherCodeText += WC_BROUI;  break;
+            case 51: lWeatherCodeText += WC_PLUIE;  break;
+            case 53: lWeatherCodeText += WC_PLUIE;  break;
+            case 55: lWeatherCodeText += WC_PLUIE;  break;
+            case 56: lWeatherCodeText += WC_PLUIE;  break;
+            case 57: lWeatherCodeText += WC_PLUIE;  break;
+            case 61: lWeatherCodeText += WC_PLUIE;  break;
+            case 63: lWeatherCodeText += WC_PLUIE;  break;
+            case 65: lWeatherCodeText += WC_PLUIE;  break;
+            case 66: lWeatherCodeText += WC_PLUIE;  break;
+            case 67: lWeatherCodeText += WC_PLUIE;  break;
+            case 71: lWeatherCodeText += WC_NEIGE;  break;
+            case 73: lWeatherCodeText += WC_NEIGE;  break;
+            case 75: lWeatherCodeText += WC_NEIGE;  break;
+            case 77: lWeatherCodeText += WC_NEIGE;  break;
+            case 80: lWeatherCodeText += WC_PLUIE;  break;
+            case 81: lWeatherCodeText += WC_PLUIE;  break;
+            case 82: lWeatherCodeText += WC_PLUIE;  break;
+            case 85: lWeatherCodeText += WC_NEIGE;  break;
+            case 86: lWeatherCodeText += WC_NEIGE;  break;
+            case 95: lWeatherCodeText += WC_ORAGE;  break;
+            case 96: lWeatherCodeText += WC_ORAGE;  break;
+            case 99: lWeatherCodeText += WC_ORAGE;  break;
+            default: lWeatherCodeText += "?";       break;
+          }
+        }
+        lWeatherCodeText = lWeatherCodeTextDebut + lWeatherCodeText + lWeatherCodeTextFin;
+
+        // Weather code pour ce quart de journée
+        if (lQuart == 0)
+          lWeather0_6 = lWeatherCodeText;
+        else if (lQuart == 1)
+          lWeather6_12 = lWeatherCodeText;
+        else if (lQuart == 2)
+          lWeather12_18 = lWeatherCodeText;
+        else if (lQuart == 3)
+          lWeather18_24 = lWeatherCodeText;
+      }
+
+      // Nouvelle ligne
+      HTMLJ += "<tr>";
+
+      // Jour
+      if (lJour2lettres == "Sa" || lJour2lettres == "Di")
+        HTMLJ += "<td class='RCOL1' style='color: red;'><b>" + lJour2lettres + "</span></b></td>";
+      else
+        HTMLJ += "<td class='RCOL1'><b>" + lJour2lettres + "</b></td>";
+
+      // Températures Min et Max
+      let lTempMinString = lTempMin.toFixed(0).toString();
+      if (lTempMinString == "-0") lTempMinString = "0";
+      let lTempMaxString = lTempMax.toFixed(0).toString();
+      if (lTempMaxString == "-0") lTempMaxString = "0";
+
+      HTMLJ += "<td class='RCOL2'>";
+      HTMLJ += "<span style='color: #00F'>" + lTempMinString +"&nbsp;&nbsp;</span>";
+      HTMLJ += "<span style='color: #F00'>" + lTempMaxString +"</span>";
+      HTMLJ += "</td>";
+
+      // 00-06h
+      HTMLJ += lWeather0_6;
+
+      // 06-12h
+      HTMLJ += lWeather6_12;
+
+      // 12-18h
+      HTMLJ += lWeather12_18;
+
+      // 18-24h
+      HTMLJ += lWeather18_24;
 
       // Pluie
-      lCumulPluie += gPrecipitation;
+      if (lCumulPluie >= 20)
+        HTMLJ += "<td class='BTF'>";
+      else if (lCumulPluie > 0)
+        HTMLJ += "<td class='BF'>";
+      else
+        HTMLJ += "<td class='RN'>";
+      HTMLJ += lCumulPluie.toFixed(1);
+      HTMLJ += "</td>";
 
       // Vent
-      if (gWind_speed_10m > lMaxVent)
-        lMaxVent = gWind_speed_10m;
-    }
+      if (lMaxVent > gSeuilVent)
+        HTMLJ += "<td class='VT'>";
+      else
+        HTMLJ += "<td class='RN'>";
+      HTMLJ += lMaxVent.toFixed(0);
+      HTMLJ += "</td>";
 
-    // Calculs Weather
-    // Boucle sur les quarts de cette journée journée
-    let lWeather0_6 = 0;
-    let lWeather6_12 = 0;
-    let lWeather12_18 = 0;
-    let lWeather18_24 = 0;
-    for (let lQuart = 0; lQuart < 4; lQuart++)
-    {
-      let lSoleil = 0;
-      let lNuage = 0;
-      let lPluie = 0;
-      let lNeige = 0;
-      let lOrage = 0;
-      let lBrouillard = 0;
+      // Fin de ligne
+      HTMLJ += "</tr>";
 
-      // Boucle sur 6 heures
-      const lWeatherCodeTextDebut = "<td class='CIEL'>";
-      const lWeatherCodeTextFin = "</td>";
-      let lWeatherCodeText = "";
-      for (let j = 0; j < 6; j++)
+      // Jour suivant
+      switch (lJour2lettres)
       {
-        GetMeasures(i*24 + lQuart*6 + j);
-        switch(gWeather_code)
-        {
-          case 0:  lWeatherCodeText += WC_SOLEI;  break;
-          case 1:  lWeatherCodeText += WC_SOLEI;  break;
-          case 2:  lWeatherCodeText += WC_NUAGE;  break;
-          case 3:  lWeatherCodeText += WC_NUAGE;  break;
-          case 45: lWeatherCodeText += WC_BROUI;  break;
-          case 48: lWeatherCodeText += WC_BROUI;  break;
-          case 51: lWeatherCodeText += WC_PLUIE;  break;
-          case 53: lWeatherCodeText += WC_PLUIE;  break;
-          case 55: lWeatherCodeText += WC_PLUIE;  break;
-          case 56: lWeatherCodeText += WC_PLUIE;  break;
-          case 57: lWeatherCodeText += WC_PLUIE;  break;
-          case 61: lWeatherCodeText += WC_PLUIE;  break;
-          case 63: lWeatherCodeText += WC_PLUIE;  break;
-          case 65: lWeatherCodeText += WC_PLUIE;  break;
-          case 66: lWeatherCodeText += WC_PLUIE;  break;
-          case 67: lWeatherCodeText += WC_PLUIE;  break;
-          case 71: lWeatherCodeText += WC_NEIGE;  break;
-          case 73: lWeatherCodeText += WC_NEIGE;  break;
-          case 75: lWeatherCodeText += WC_NEIGE;  break;
-          case 77: lWeatherCodeText += WC_NEIGE;  break;
-          case 80: lWeatherCodeText += WC_PLUIE;  break;
-          case 81: lWeatherCodeText += WC_PLUIE;  break;
-          case 82: lWeatherCodeText += WC_PLUIE;  break;
-          case 85: lWeatherCodeText += WC_NEIGE;  break;
-          case 86: lWeatherCodeText += WC_NEIGE;  break;
-          case 95: lWeatherCodeText += WC_ORAGE;  break;
-          case 96: lWeatherCodeText += WC_ORAGE;  break;
-          case 99: lWeatherCodeText += WC_ORAGE;  break;
-          default: lWeatherCodeText += "?";       break;
-        }
+        case "Di": lJour2lettres = "Lu"; break;
+        case "Lu": lJour2lettres = "Ma"; break;
+        case "Ma": lJour2lettres = "Me"; break;
+        case "Me": lJour2lettres = "Je"; break;
+        case "Je": lJour2lettres = "Ve"; break;
+        case "Ve": lJour2lettres = "Sa"; break;
+        case "Sa": lJour2lettres = "Di"; break;
       }
-      lWeatherCodeText = lWeatherCodeTextDebut + lWeatherCodeText + lWeatherCodeTextFin;
-
-      // Weather code pour ce quart de journée
-      if (lQuart == 0)
-        lWeather0_6 = lWeatherCodeText;
-      else if (lQuart == 1)
-        lWeather6_12 = lWeatherCodeText;
-      else if (lQuart == 2)
-        lWeather12_18 = lWeatherCodeText;
-      else if (lQuart == 3)
-        lWeather18_24 = lWeatherCodeText;
     }
+    HTMLJ += "</table>";
+  } while(0);
 
-    // Nouvelle ligne
-    HTMLJ += "<tr>";
 
-    // Jour
-    if (lJour2lettres == "Sa" || lJour2lettres == "Di")
-      HTMLJ += "<td class='RCOL1' style='color: red;'><b>" + lJour2lettres + "</span></b></td>";
-    else
-      HTMLJ += "<td class='RCOL1'><b>" + lJour2lettres + "</b></td>";
+  //================================================================================================
+  // Création de la page Résumé jour par jour, valeurs MAXIMALES
+  // Entête
+  HTMLJ += "<div style='height: 25px;'></div>";
+  HTMLJ += "<b>Prévision des prochains jours, valeurs MAXIMALES</b><br>";
+  HTMLJ += "<i>Températures ressenties, vitesse du vent maximale</i>";
+  HTMLJ += "<div style='height: 5px;'></div>";
+  HTMLJ += "<table class='TableMeteoSemaine'>";
+  HTMLJ += "<tr>";
+  HTMLJ += "<td class='RH' style='width: 10%;'><b>J</b></td>";
+  HTMLJ += "<td class='RH' style='width: 18%;'><b>Tres</b></td>";
+  HTMLJ += "<td class='RH' style='width: 20%;'><b>00-06</b></td>";
+  HTMLJ += "<td class='RH' style='width: 20%;'><b>06-12</b></td>";
+  HTMLJ += "<td class='RH' style='width: 20%;'><b>12-18</b></td>";
+  HTMLJ += "<td class='RH' style='width: 20%;'><b>18-24</b></td>";
+  HTMLJ += "<td class='RH' style='width: 13%;'><b>P</b></td>";
+  HTMLJ += "<td class='RH' style='width: 10%;'><b>R</b></td>";
+  HTMLJ += "</tr>";
 
-    // Températures Min et Max
-    HTMLJ += "<td class='RCOL2'>";
-    HTMLJ += "<span style='color: #00F'>" + lTempMin.toFixed(0)+"&nbsp;&nbsp;</span>";
-    HTMLJ += "<span style='color: #F00'>" + lTempMax.toFixed(0)+"</span>";
-    HTMLJ += "</td>";
-
-    // 00-06h
-    HTMLJ += lWeather0_6;
-
-    // 06-12h
-    HTMLJ += lWeather6_12;
-
-    // 12-18h
-    HTMLJ += lWeather12_18;
-
-    // 18-24h
-    HTMLJ += lWeather18_24;
-
-    // Pluie
-    if (lCumulPluie >= 20)
-      HTMLJ += "<td class='BTF'>";
-    else if (lCumulPluie > 0)
-      HTMLJ += "<td class='BF'>";
-    else
-      HTMLJ += "<td class='RN'>";
-    HTMLJ += lCumulPluie.toFixed(1);
-    HTMLJ += "</td>";
-
-    // Vent
-    if (lMaxVent > gSeuilVent)
-      HTMLJ += "<td class='VT'>";
-    else
-      HTMLJ += "<td class='RN'>";
-    HTMLJ += lMaxVent.toFixed(0);
-    HTMLJ += "</td>";
-
-    // Fin de ligne
-    HTMLJ += "</tr>";
-
-    // Jour suivant
-    switch (lJour2lettres)
+  //----- Boucle sur les jours---------------------------------
+  do /* Boucle unique */
+  {
+    // Jour du bulletin
+    let lJour2lettres = lJourLettresBulletin.substring(0, 2);
+    for (let i = 0; i < 14; i++)
     {
-      case "Di": lJour2lettres = "Lu"; break;
-      case "Lu": lJour2lettres = "Ma"; break;
-      case "Ma": lJour2lettres = "Me"; break;
-      case "Me": lJour2lettres = "Je"; break;
-      case "Je": lJour2lettres = "Ve"; break;
-      case "Ve": lJour2lettres = "Sa"; break;
-      case "Sa": lJour2lettres = "Di"; break;
+      // Calculs pour ce jour
+      let lTempMin = +999;
+      let lTempMax = -999;
+      let lCumulPluie = 0;
+      let lMaxVent = 0;
+
+      // Boucle sur les heures
+      for (let j = 0; j < 24; j++)
+      {
+        GetMeasures(i*24 + j);
+
+        // Température min
+        if (gApparent_temperature < lTempMin)
+          lTempMin = gApparent_temperature;
+
+        // Température max
+        if (gApparent_temperature > lTempMax)
+          lTempMax = gApparent_temperature;
+
+        // Pluie
+        lCumulPluie += gPrecipitation;
+
+        // Vent
+        if (gWind_gusts_10m > lMaxVent)
+          lMaxVent = gWind_gusts_10m;
+      }
+
+      // Calculs Weather
+      // Boucle sur les quarts de cette journée journée
+      let lWeather0_6 = 0;
+      let lWeather6_12 = 0;
+      let lWeather12_18 = 0;
+      let lWeather18_24 = 0;
+      for (let lQuart = 0; lQuart < 4; lQuart++)
+      {
+        let lSoleil = 0;
+        let lNuage = 0;
+        let lPluie = 0;
+        let lNeige = 0;
+        let lOrage = 0;
+        let lBrouillard = 0;
+
+        // Boucle sur 6 heures
+        const lWeatherCodeTextDebut = "<td class='CIEL'>";
+        const lWeatherCodeTextFin = "</td>";
+        let lWeatherCodeText = "";
+        for (let j = 0; j < 6; j++)
+        {
+          GetMeasures(i*24 + lQuart*6 + j);
+          switch(gWeather_code)
+          {
+            case 0:  lWeatherCodeText += WC_SOLEI;  break;
+            case 1:  lWeatherCodeText += WC_SOLEI;  break;
+            case 2:  lWeatherCodeText += WC_NUAGE;  break;
+            case 3:  lWeatherCodeText += WC_NUAGE;  break;
+            case 45: lWeatherCodeText += WC_BROUI;  break;
+            case 48: lWeatherCodeText += WC_BROUI;  break;
+            case 51: lWeatherCodeText += WC_PLUIE;  break;
+            case 53: lWeatherCodeText += WC_PLUIE;  break;
+            case 55: lWeatherCodeText += WC_PLUIE;  break;
+            case 56: lWeatherCodeText += WC_PLUIE;  break;
+            case 57: lWeatherCodeText += WC_PLUIE;  break;
+            case 61: lWeatherCodeText += WC_PLUIE;  break;
+            case 63: lWeatherCodeText += WC_PLUIE;  break;
+            case 65: lWeatherCodeText += WC_PLUIE;  break;
+            case 66: lWeatherCodeText += WC_PLUIE;  break;
+            case 67: lWeatherCodeText += WC_PLUIE;  break;
+            case 71: lWeatherCodeText += WC_NEIGE;  break;
+            case 73: lWeatherCodeText += WC_NEIGE;  break;
+            case 75: lWeatherCodeText += WC_NEIGE;  break;
+            case 77: lWeatherCodeText += WC_NEIGE;  break;
+            case 80: lWeatherCodeText += WC_PLUIE;  break;
+            case 81: lWeatherCodeText += WC_PLUIE;  break;
+            case 82: lWeatherCodeText += WC_PLUIE;  break;
+            case 85: lWeatherCodeText += WC_NEIGE;  break;
+            case 86: lWeatherCodeText += WC_NEIGE;  break;
+            case 95: lWeatherCodeText += WC_ORAGE;  break;
+            case 96: lWeatherCodeText += WC_ORAGE;  break;
+            case 99: lWeatherCodeText += WC_ORAGE;  break;
+            default: lWeatherCodeText += "?";       break;
+          }
+        }
+        lWeatherCodeText = lWeatherCodeTextDebut + lWeatherCodeText + lWeatherCodeTextFin;
+
+        // Weather code pour ce quart de journée
+        if (lQuart == 0)
+          lWeather0_6 = lWeatherCodeText;
+        else if (lQuart == 1)
+          lWeather6_12 = lWeatherCodeText;
+        else if (lQuart == 2)
+          lWeather12_18 = lWeatherCodeText;
+        else if (lQuart == 3)
+          lWeather18_24 = lWeatherCodeText;
+      }
+
+      // Nouvelle ligne
+      HTMLJ += "<tr>";
+
+      // Jour
+      if (lJour2lettres == "Sa" || lJour2lettres == "Di")
+        HTMLJ += "<td class='RCOL1' style='color: red;'><b>" + lJour2lettres + "</span></b></td>";
+      else
+        HTMLJ += "<td class='RCOL1'><b>" + lJour2lettres + "</b></td>";
+
+      // Températures Min et Max
+      let lTempMinString = lTempMin.toFixed(0).toString();
+      if (lTempMinString == "-0") lTempMinString = "0";
+      let lTempMaxString = lTempMax.toFixed(0).toString();
+      if (lTempMaxString == "-0") lTempMaxString = "0";
+      HTMLJ += "<td class='RCOL2'>";
+      HTMLJ += "<span style='color: #00F'>" + lTempMinString +"&nbsp;&nbsp;</span>";
+      HTMLJ += "<span style='color: #F00'>" + lTempMaxString +"</span>";
+      HTMLJ += "</td>";
+
+      // 00-06h
+      HTMLJ += lWeather0_6;
+
+      // 06-12h
+      HTMLJ += lWeather6_12;
+
+      // 12-18h
+      HTMLJ += lWeather12_18;
+
+      // 18-24h
+      HTMLJ += lWeather18_24;
+
+      // Pluie
+      if (lCumulPluie >= 20)
+        HTMLJ += "<td class='BTF'>";
+      else if (lCumulPluie > 0)
+        HTMLJ += "<td class='BF'>";
+      else
+        HTMLJ += "<td class='RN'>";
+      HTMLJ += lCumulPluie.toFixed(1);
+      HTMLJ += "</td>";
+
+      // Vent
+      if (lMaxVent > gSeuilVent)
+        HTMLJ += "<td class='VTR'>";
+      else
+        HTMLJ += "<td class='RN'>";
+      HTMLJ += lMaxVent.toFixed(0);
+      HTMLJ += "</td>";
+
+      // Fin de ligne
+      HTMLJ += "</tr>";
+
+      // Jour suivant
+      switch (lJour2lettres)
+      {
+        case "Di": lJour2lettres = "Lu"; break;
+        case "Lu": lJour2lettres = "Ma"; break;
+        case "Ma": lJour2lettres = "Me"; break;
+        case "Me": lJour2lettres = "Je"; break;
+        case "Je": lJour2lettres = "Ve"; break;
+        case "Ve": lJour2lettres = "Sa"; break;
+        case "Sa": lJour2lettres = "Di"; break;
+      }
     }
-  }
-  HTMLJ += "</table>";
+    HTMLJ += "</table>";
+  } while(0);
 
   // Affichage des légendes
   LegendesJours();
@@ -739,8 +937,6 @@ async function DisplayBulletin(data)
     ModeHeures();
   if (gMeteoMode == "J")
     ModeJours();
-
-    // ModeJours(); // Mode DEBUG : affichage du mode Jours (commenter si RELEASE)
 }
 
 //-------------------------------------------------------
@@ -796,7 +992,7 @@ function LegendesHeures()
 {
   HTMLJ += "<div class='Legendes'>";
   HTMLJ += "<br><b>Légendes</b><br>";
-  HTMLJ += "<span style='display: inline-block; width:50px;'><b>&nbsp;HR</b></span> Heure<br>";
+  HTMLJ += "<span style='display: inline-block; width:50px;'><b>&nbsp;H</b></span> Heure<br>";
   HTMLJ += "<span style='display: inline-block; width:50px;'><b>&nbsp;Ciel</b></span> Etat du ciel<br>";
   HTMLJ += "&nbsp;&nbsp;&nbsp;<span style='display: inline-block; width:50px;'><span style='font-family: monospace;background-color: "+SOLEI+";'>&nbsp;&nbsp;</span></span><small>Dégagé</small><br>";
   HTMLJ += "<div style='height: 2px;'></div>";
@@ -809,12 +1005,13 @@ function LegendesHeures()
   HTMLJ += "&nbsp;&nbsp;&nbsp;<span style='display: inline-block; width:50px;'><span style='font-family: monospace;background-color: "+ORAGE+";'>&nbsp;&nbsp;</span></span><small>Orage</small><br>";
   HTMLJ += "<div style='height: 2px;'></div>";
   HTMLJ += "&nbsp;&nbsp;&nbsp;<span style='display: inline-block; width:50px;'><span style='font-family: monospace;background-color: "+NEIGE+";'>&nbsp;&nbsp;</span></span><small>Neige</small><br>";
-  HTMLJ += "<span style='display: inline-block; width:50px;'><b>&nbsp;T</b></span> Température réelle<br>";
-  HTMLJ += "<span style='display: inline-block; width:50px;'><b>&nbsp;Tres</b></span> Température ressentie<br>";
-  HTMLJ += "<span style='display: inline-block; width:50px;'><b>&nbsp;Hum</b></span> Humidité<br>";
-  HTMLJ += "<span style='display: inline-block; width:50px;'><b>&nbsp;Préci.</b></span> Précipitations et risque (pluie, neige)<br>";
-  HTMLJ += "<span style='display: inline-block; width:50px;'><b>&nbsp;Vent</b></span> Vent et direction<br>";
+  HTMLJ += "<span style='display: inline-block; width:50px;'><b>&nbsp;T</b></span> Température réelle (°C)<br>";
+  HTMLJ += "<span style='display: inline-block; width:50px;'><b>&nbsp;Tres</b></span> Température ressentie (°C)<br>";
+  HTMLJ += "<span style='display: inline-block; width:50px;'><b>&nbsp;Hum</b></span> Humidité (%)<br>";
+  HTMLJ += "<span style='display: inline-block; width:50px;'><b>&nbsp;Préci.</b></span> Précipitations et risque (pluie, neige) (mm ou %)<br>";
+  HTMLJ += "<span style='display: inline-block; width:50px;'><b>&nbsp;Vent</b></span> Vitesse du vent (km/h)<br>";
   HTMLJ += "<span style='display: inline-block; width:50px;'><b>&nbsp;Dir</b></span> Direction du vent<br>";
+  HTMLJ += "<span style='display: inline-block; width:50px;'><b>&nbsp;Raf</b></span> Rafales de vent (km/h)<br>";
   HTMLJ += "</div>";
 }
 function LegendesJours()
@@ -822,7 +1019,7 @@ function LegendesJours()
   HTMLJ += "<div class='Legendes'>";
   HTMLJ += "<br><b>Légendes</b><br>";
   HTMLJ += "<span style='display: inline-block; width:50px;'><b>&nbsp;J</b></span> Jour<br>";
-  HTMLJ += "<span style='display: inline-block; width:50px;'><b>&nbsp;T</b></span> Températures min et max<br>";
+  HTMLJ += "<span style='display: inline-block; width:50px;'><b>&nbsp;T</b></span> Températures min et max (°C)<br>";
   HTMLJ += "<span style='display: inline-block; width:50px;'><b>&nbsp;00-..</b></span> Etat du ciel en fonction de l'heure<br>";
   HTMLJ += "&nbsp;&nbsp;&nbsp;<span style='display: inline-block; width:50px;'><span style='font-family: monospace;background-color: "+SOLEI+";'>&nbsp;&nbsp;</span></span><small>Dégagé</small><br>";
   HTMLJ += "<div style='height: 2px;'></div>";
@@ -835,8 +1032,9 @@ function LegendesJours()
   HTMLJ += "&nbsp;&nbsp;&nbsp;<span style='display: inline-block; width:50px;'><span style='font-family: monospace;background-color: "+ORAGE+";'>&nbsp;&nbsp;</span></span><small>Orage</small><br>";
   HTMLJ += "<div style='height: 2px;'></div>";
   HTMLJ += "&nbsp;&nbsp;&nbsp;<span style='display: inline-block; width:50px;'><span style='font-family: monospace;background-color: "+NEIGE+";'>&nbsp;&nbsp;</span></span><small>Neige</small><br>";
-  HTMLJ += "<span style='display: inline-block; width:50px;'><b>&nbsp;P</b></span> Précipitations (pluie, neige)<br>";
-  HTMLJ += "<span style='display: inline-block; width:50px;'><b>&nbsp;V</b></span> Vent<br>";
+  HTMLJ += "<span style='display: inline-block; width:50px;'><b>&nbsp;P</b></span> Précipitations (pluie, neige) (mm ou %)<br>";
+  HTMLJ += "<span style='display: inline-block; width:50px;'><b>&nbsp;V</b></span> Vitesse du vent (km/h)<br>";
+  HTMLJ += "<span style='display: inline-block; width:50px;'><b>&nbsp;R</b></span> Rafales du vent(km/h)<br>";
   HTMLJ += "</div>";
 }
 
@@ -1104,4 +1302,19 @@ function ButMeteoECMWFClick()
     gModel = "ECMWF";
     DisplayLastBulletin();
   }
+}
+
+//-------------------------------------------------------
+// Affichages des valeurs normales
+//-------------------------------------------------------
+function ValeursNormalesClick()
+{
+}
+
+
+//-------------------------------------------------------
+// Affichages des valeurs maximales
+//-------------------------------------------------------
+function ValeursMaximalesClick()
+{
 }

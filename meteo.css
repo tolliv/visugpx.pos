@@ -280,6 +280,13 @@
   background-color: #FFB;
 }
 
+/* Orange foncé rafales */
+.VTR
+{
+  border: 1px solid #CCC;
+  background-color: #FD6;
+}
+
 #ButChoixEmplacementFermer
 {
   height: 30px;
